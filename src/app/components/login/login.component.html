@@ -1,0 +1,36 @@
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title">Edit Profile</h4>
+                        <p class="card-category">Complete your profile</p>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="formLogin" (ngSubmit)="Login()">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Usuario" formControlName="username">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Contraseña" formControlName="password">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button class="btn btn-danger pull-right"
+                            type="submit" [disabled]="!formLogin.valid">
+                                Iniciar sesión</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>   
+            </div>   
+        </div>   
+    </div>   
+</div>    
+
