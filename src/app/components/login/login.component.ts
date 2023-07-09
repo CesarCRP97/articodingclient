@@ -16,7 +16,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   formLogin: FormGroup;
   subRef$: Subscription;
-
+  isError: boolean = false;
+  errorMensaje; string;
+  
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
@@ -40,7 +42,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subRef$ =  this.http.post<IResponse>('http://13.48.149.249:8080/login', 
     usuarioLogin, { observe: 'response'})
     .subscribe(response => {
+      debugger
       if (response) {
+        this.isError = false;
         const token = response.body.token;
           console.log('Token -> ', token);
           sessionStorage.setItem('token', token );
@@ -49,7 +53,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       }
     }, err => {
-      console.log('Error de login -> ', err);
+      this.errorMensaje = err.error.message;
+      this.isError = true;
+      this.formLogin.reset();
     });
   }
 
