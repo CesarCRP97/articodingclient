@@ -122,4 +122,9 @@ export class NavbarComponent implements OnInit {
       }
       return 'Dashboard';
     }
+
+    closeSession() {
+        sessionStorage.clear();
+        this.router.navigate(['/login']);
+    }
 }

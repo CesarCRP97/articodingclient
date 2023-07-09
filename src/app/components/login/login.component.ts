@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ILogin } from 'app/models/ilogin';
-import { IResponse } from 'app/models/iresponse';
 import { Subscription } from 'rxjs';
+import { ILogin } from '../../models/ilogin';
+import { IResponse } from '../../models/iresponse';
+import { ServerService } from 'app/server.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   
   constructor(
     private formBuilder: FormBuilder,
-    private http: HttpClient,
+    private serverService: ServerService,
     private router: Router
   ) { 
     this.formLogin = formBuilder.group({
@@ -38,25 +39,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: this.formLogin.value.username,
       password: this.formLogin.value.password,
     }
+    this.subRef$ = this.serverService.login(usuarioLogin)
+      .subscribe(response => {
+        if (response) {
+          const token = response.body.token;
+            console.log('Token -> ', token);
+            sessionStorage.setItem('token','Bearer ' + token );
+            this.router.navigate(['/users'])
+        } else {
 
-    this.subRef$ =  this.http.post<IResponse>('http://13.48.149.249:8080/login', 
-    usuarioLogin, { observe: 'response'})
-    .subscribe(response => {
-      debugger
-      if (response) {
-        this.isError = false;
-        const token = response.body.token;
-          console.log('Token -> ', token);
-          sessionStorage.setItem('token', token );
-          this.router.navigate(['/home'])
-      } else {
-
-      }
-    }, err => {
-      this.errorMensaje = err.error.message;
-      this.isError = true;
-      this.formLogin.reset();
-    });
+        }
+      }, err => {
+        this.errorMensaje = err.error.message;
+        this.isError = true;
+        this.formLogin.reset();
+      });
   }
 
   ngOnDestroy(): void {

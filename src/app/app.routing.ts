@@ -8,9 +8,10 @@ import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+
 const routes: Routes =[
   { path:'', redirectTo: '/login', pathMatch:'full'},
-  { path:'home', component: AdminLayoutComponent,
+  { path:'', component: AdminLayoutComponent,
     children: [{
       path: '',
       loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(m => m.AdminLayoutModule)

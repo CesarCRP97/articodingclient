@@ -25,18 +25,6 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let httpHeaders: HttpHeaders = new HttpHeaders();
-    const token = sessionStorage.getItem('token');
-    httpHeaders.append('Authorization', 'Bearer ' + token)
-
-    this.subRef$ = this.http.get('http://13.48.149.249:8080/hello',
-    { headers: httpHeaders,
-      responseType: 'text',
-      observe: 'response'
-    })
-    .subscribe(res => {
-        alert(res.body);
-    }, err => console.log('Error' + err));
 
       const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 
