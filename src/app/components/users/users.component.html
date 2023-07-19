@@ -5,12 +5,15 @@
                 <div class="card">
                     <div style="width: 60px;" class="col card-header card-header-info align-self-end"> 
                         <a class="material-icons" style="color: white;" (click)="newUser()">person_add</a>
- 
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive" *ngIf="loadTable">
-                            <mat-table class="lessons-table mat-elevation-z8" [dataSource]="users">
-  
+                        <div class="table-responsive" *ngIf="true">
+                            <mat-table class="lessons-table mat-elevation-z8" [dataSource]="users" #userTable>
+                                <ng-container matColumnDef="id">
+                                    <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                    <mat-cell *matCellDef="let user">{{user.id}}</mat-cell>
+                                </ng-container>
+
                                 <ng-container matColumnDef="username">
                                     <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
                                     <mat-cell *matCellDef="let user">{{user.username}}</mat-cell>
@@ -24,22 +27,18 @@
                               
                                 <ng-container matColumnDef="roles">
                                     <mat-header-cell *matHeaderCellDef>Roles</mat-header-cell>
-                                    <mat-cell *matCellDef="let user">
-                                        <mat-chip-list>
-                                            <mat-chip color="danger" *ngFor="let role of user?.roles">{{role.name}}</mat-chip>
-                                        </mat-chip-list>
-                                    </mat-cell>
+                                    <mat-cell  class="description-cell"
+                                    *matCellDef="let user">{{user.rol}}</mat-cell>
                                 </ng-container>
                                 
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                <mat-paginator #paginator  [length]="length"
-                                [pageIndex]="pageIndex"
-                                [pageSize]="pageSize"
-                                [pageSizeOptions]="[5, 10, 25, 100]"
-                                (page)="pageEvent = getServerData($event)"></mat-paginator>
                                 <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
                                 
                             </mat-table>
+                            <mat-paginator #paginator  [length]="length"
+                            [pageIndex]="pageIndex"  [pageSize]="pageSize"
+                            [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent = getServerData($event)"
+                            [showFirstLastButtons]="true"></mat-paginator>
                         </div>
                     </div>
                 </div>

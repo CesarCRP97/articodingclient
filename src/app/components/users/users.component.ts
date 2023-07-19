@@ -8,6 +8,8 @@ import { ServerService } from 'app/server.service';
 import { Observable, Subscription } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateUserComponent } from './create-user/create-user.component';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +22,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private serverService: ServerService
+    private serverService: ServerService,
+    public dialog: MatDialog
   ) { }
 
   subRefs$: Subscription[] = [];
@@ -35,20 +38,23 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const p: PageEvent =new PageEvent();
     p.pageIndex = 0;
-    p.pageSize = 10;
+    p.pageSize = 5;
    this.getServerData(p);
   }
   public getServerData(event?:PageEvent){
     this.subRefs$.push(
       this.serverService.getUsers(event.pageIndex, event.pageSize)
       .subscribe(
-        response => {
-          if (response.status === 200) {
-            let responsePage: IPage<IUser> = response.body;
-            this.users = responsePage.content;
+        res => {
+          if (res.status === 200) {
+            let response: IPage<IUser> = res.body;
+            this.users = response.content;
             this.loadTable = true;
+            this.pageIndex = response.pageable.pageNumber;
+            this.pageSize = response.pageable.pageNumber;
+            this.length = response.totalElements;
           } else {
-            alert('Algo ha pasado... ' + response.status);
+            alert('Algo ha pasado... ' + res.status);
           }
         }, err => {
           alert('Algo ha pasado... ' + err);
@@ -61,7 +67,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   newUser() {
-    alert("asdad");
+    const dialogRef = this.dialog.open(CreateUserComponent, {
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+    
   }
 
   ngOnDestroy(): void {

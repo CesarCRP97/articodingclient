@@ -1,6 +1,7 @@
 export interface IUser {
 
     username: string;
+    password: string;
     enabled: boolean;
-    roles: string[];
+    rol: string;
 }

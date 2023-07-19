@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { ServerService } from './server.service';
 
 @NgModule({
   imports: [
@@ -17,14 +16,11 @@ import { ServerService } from './server.service';
     HttpClientModule,
     ComponentsModule,
     RouterModule,
-    AppRoutingModule,
-    
-     
+    AppRoutingModule     
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent,
-    
+    AdminLayoutComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

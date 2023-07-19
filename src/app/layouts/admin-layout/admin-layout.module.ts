@@ -19,6 +19,9 @@ import { ServerService } from 'app/server.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtInterceptor } from 'app/JwtInterceptor';
+import { CreateUserComponent } from 'app/components/users/create-user/create-user.component';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import {MatTabsModule} from '@angular/material/tabs'
 
 @NgModule({
   imports: [
@@ -37,10 +40,13 @@ import { JwtInterceptor } from 'app/JwtInterceptor';
     MatTooltipModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatDialogModule,
+    MatTabsModule
   ],
   declarations: [
     UsersComponent,
+    CreateUserComponent,
     LevelsComponent,
     ClassesComponent
   ],
