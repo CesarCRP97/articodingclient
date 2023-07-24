@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { IClassRoom } from './models/IClassRoom';
 import { ILink } from './models/ILink';
 import { ILogin } from './models/ilogin';
 import { IPage } from './models/IPage';
@@ -14,7 +15,7 @@ import { User } from './models/User';
 export class ServerService {
 
   //host:string = "http://13.48.149.249:8080/";
-    host:string = "http://localhost:8080/";
+  host:string = "http://localhost:8080/";
   authorized: boolean = false;
 
 
@@ -35,6 +36,12 @@ export class ServerService {
   createUser(user: User):Observable<HttpResponse<ILink>> {
     const url = this.host + 'users';
     return this.http.post<ILink>(url, user,
+      { observe: 'response' });
+  }
+
+  getClassRoms(page: number, size: number):Observable<HttpResponse<IPage<IClassRoom>>> {
+    const url = this.host + 'classes?page=' + page + '&size=' + size;
+    return this.http.get<IPage<IClassRoom>>(url, 
       { observe: 'response' });
   }
   

@@ -51,7 +51,7 @@ export class UsersComponent implements OnInit, OnDestroy {
             this.users = response.content;
             this.loadTable = true;
             this.pageIndex = response.pageable.pageNumber;
-            this.pageSize = response.pageable.pageNumber;
+            this.pageSize = response.pageable.pageSize;
             this.length = response.totalElements;
           } else {
             alert('Algo ha pasado... ' + res.status);
