@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { IClassRoom } from './models/IClassRoom';
+import { ILevel } from './models/Ilevel';
 import { ILink } from './models/ILink';
 import { ILogin } from './models/ilogin';
 import { IPage } from './models/IPage';
@@ -42,6 +43,12 @@ export class ServerService {
   getClassRoms(page: number, size: number):Observable<HttpResponse<IPage<IClassRoom>>> {
     const url = this.host + 'classes?page=' + page + '&size=' + size;
     return this.http.get<IPage<IClassRoom>>(url, 
+      { observe: 'response' });
+  }
+
+  getLevels(page: number, size: number):Observable<HttpResponse<IPage<ILevel>>> {
+    const url = this.host + 'levels?page=' + page + '&size=' + size;
+    return this.http.get<IPage<ILevel>>(url, 
       { observe: 'response' });
   }
   

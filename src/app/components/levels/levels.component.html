@@ -1,1 +1,67 @@
-<p>levels works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div style="width: 60px;" class="col card-header card-header-info align-self-end"> 
+                        <a class="material-icons" style="color: white;" (click)="newlevel()">school</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive" *ngIf="true">
+                            <mat-table class="lessons-table mat-elevation-z8" [dataSource]="levels" #levelTable>
+                                <ng-container matColumnDef="id">
+                                    <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                    <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="title">
+                                    <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                    <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                </ng-container>
+                              
+                                <ng-container matColumnDef="description">
+                                    <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                                    <mat-cell  class="description-cell"
+                                              *matCellDef="let level">{{level.description}}</mat-cell>
+                                </ng-container>
+                              
+                                <ng-container matColumnDef="publicLevel">
+                                    <mat-header-cell *matHeaderCellDef>Público</mat-header-cell>
+                                    <mat-cell  class="description-cell"
+                                    *matCellDef="let level">{{level.publicLevel}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="classRooms">
+                                    <mat-header-cell *matHeaderCellDef>NºClases</mat-header-cell>
+                                    <mat-cell  class="description-cell"
+                                    *matCellDef="let level">{{level.classRooms}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="owner">
+                                    <mat-header-cell *matHeaderCellDef>Creador</mat-header-cell>
+                                    <mat-cell  class="description-cell"
+                                    *matCellDef="let level">{{level.owner.name}}</mat-cell>
+                                </ng-container>
+                                
+                                <ng-container matColumnDef="active">
+                                    <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
+                                    <mat-cell  class="description-cell"
+                                    *matCellDef="let level">{{level.active}}</mat-cell>
+                                </ng-container>
+                    
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                                
+                            </mat-table>
+                            <mat-paginator #paginator  [length]="length"
+                            [pageIndex]="pageIndex"  [pageSize]="pageSize"
+                            [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent = getServerData($event)"
+                            [showFirstLastButtons]="true"></mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  
