@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ServerService } from 'app/server.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { IClassRoom } from 'app/models/IClassRoom';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,8 @@ export class ClassesComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private serverService: ServerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private activateRoute: ActivatedRoute
   ) { }
 
   subRefs$: Subscription[] = [];
@@ -33,16 +34,33 @@ export class ClassesComponent implements OnInit {
   classRooms: IClassRoom[];
   loadTable:boolean = false;
   displayedColumns: string[] = ['id','name', 'description','enabled','levels', 'teachers','students'];
+  levelId: number = null;
+  userId:number = null; 
+  teacherId:number = null;
+
   ngOnInit(): void {
     const p: PageEvent =new PageEvent();
     p.pageIndex = 0;
     p.pageSize = 5;
+    if (this.activateRoute.queryParams['_value']) {
+      
+      if(this.activateRoute.queryParams['_value']['levelId']) {
+        this.levelId = this.activateRoute.queryParams['_value']['levelId'];
+      }
+      if(this.activateRoute.queryParams['_value']['userId']) {
+        this.userId = this.activateRoute.queryParams['_value']['userId'];
+      }
+      if(this.activateRoute.queryParams['_value']['teacherId']) {
+        this.userId = this.activateRoute.queryParams['_value']['teacherId'];
+      }
+    }
+
    this.getServerData(p);
   }
 
   public getServerData(event?:PageEvent){
     this.subRefs$.push(
-      this.serverService.getClassRoms(event.pageIndex, event.pageSize)
+      this.serverService.getClassRoms(event.pageIndex, event.pageSize, this.levelId, this.userId, this.teacherId)
       .subscribe(
         res => {
           if (res.status === 200) {
@@ -63,6 +81,26 @@ export class ClassesComponent implements OnInit {
       )
     );
     return event;
+  }
+
+  goStudents(classId: number) {
+    const currentUrl = '/#/users?classId=' + classId + '&teacher=false';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });
+  }
+  goTeachers(classId: number) {
+    const currentUrl = '/#/users?classId=' + classId + '&teacher=true';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });
+  }
+
+  goLevels(levelId: number) {
+    const currentUrl = '/#/levels?classId=' + levelId;
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });
   }
 
   newClassRoom() {

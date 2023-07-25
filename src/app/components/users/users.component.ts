@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from 'app/models/IUser';
 import { IPage } from 'app/models/IPage';
 import { ServerService } from 'app/server.service';
@@ -23,7 +23,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private router: Router,
     private serverService: ServerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private activateRoute: ActivatedRoute
   ) { }
 
   subRefs$: Subscription[] = [];
@@ -35,17 +36,28 @@ export class UsersComponent implements OnInit, OnDestroy {
   users: IUser[];
   loadTable:boolean = false;
   displayedColumns: string[] = ['username', 'enabled', 'roles'];
+  classId: number = null;
+  teacher:boolean = null;
   ngOnInit(): void {
     const p: PageEvent =new PageEvent();
     p.pageIndex = 0;
     p.pageSize = 5;
+    if (this.activateRoute.queryParams['_value']) {
+      if(this.activateRoute.queryParams['_value']['classId']) {
+        this.classId = this.activateRoute.queryParams['_value']['classId'];
+        this.teacher = this.activateRoute.queryParams['_value']['teacher'];
+      }
+   }
    this.getServerData(p);
+
   }
   public getServerData(event?:PageEvent){
+    
     this.subRefs$.push(
-      this.serverService.getUsers(event.pageIndex, event.pageSize)
+      this.serverService.getUsers(event.pageIndex, event.pageSize, this.classId, this.teacher)
       .subscribe(
         res => {
+        
           if (res.status === 200) {
             let response: IPage<IUser> = res.body;
             this.users = response.content;

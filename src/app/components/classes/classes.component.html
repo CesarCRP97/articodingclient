@@ -28,24 +28,27 @@
                                 <ng-container matColumnDef="enabled">
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
-                                    *matCellDef="let classRoom">{{classRoom.enabled}}</mat-cell>
+                                    *matCellDef="let classRoom">
+                                        <mat-slide-toggle  disabled="true" color="primary"
+                                        [checked]="classRoom.enabled"></mat-slide-toggle>  
+                                    </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="students">
                                     <mat-header-cell *matHeaderCellDef>NºEstudiantes</mat-header-cell>
-                                    <mat-cell  class="description-cell"
+                                    <mat-cell (click)="goStudents(classRoom.id)" class="description-cell"
                                     *matCellDef="let classRoom">{{classRoom.students}}</mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="teachers">
                                     <mat-header-cell *matHeaderCellDef>NºProfesores</mat-header-cell>
-                                    <mat-cell  class="description-cell"
+                                    <mat-cell (click)="goTeachers(classRoom.id)" class="description-cell"
                                     *matCellDef="let classRoom">{{classRoom.teachers.length}}</mat-cell>
                                 </ng-container>
      
                                 <ng-container matColumnDef="levels">
                                     <mat-header-cell *matHeaderCellDef>NºNiveles</mat-header-cell>
-                                    <mat-cell  class="description-cell"
+                                    <mat-cell (click)="goLevels(classRoom.id)"  class="description-cell"
                                     *matCellDef="let classRoom">{{classRoom.levels}}</mat-cell>
                                 </ng-container>                           
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

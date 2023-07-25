@@ -22,12 +22,15 @@
                                 <ng-container matColumnDef="enabled">
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
-                                              *matCellDef="let user">{{user.enabled}}</mat-cell>
+                                              *matCellDef="let user">
+                                              <mat-slide-toggle  disabled="true" color="primary"
+                                              [checked]="user.enabled"></mat-slide-toggle>    
+                                    </mat-cell>
                                 </ng-container>
                               
                                 <ng-container matColumnDef="roles">
                                     <mat-header-cell *matHeaderCellDef>Roles</mat-header-cell>
-                                    <mat-cell  class="description-cell"
+                                    <mat-cell  class="description-cell" 
                                     *matCellDef="let user">{{user.rol}}</mat-cell>
                                 </ng-container>
                                 

@@ -6,7 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ILevel } from 'app/models/Ilevel';
 import { IPage } from 'app/models/IPage';
 import { ServerService } from 'app/server.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,8 +20,10 @@ export class LevelsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private router: Router,
+    private activatedRouter: ActivatedRoute,
     private serverService: ServerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private activateRoute: ActivatedRoute
   ) { }
 
   subRefs$: Subscription[] = [];
@@ -33,16 +35,28 @@ export class LevelsComponent implements OnInit {
   levels: ILevel[];
   loadTable:boolean = false;
   displayedColumns: string[] = ['id','title', 'description','active','publicLevel', 'classRooms','owner'];
+  classId: number = null;
+  userId:number = null; 
+  
   ngOnInit(): void {
-    const p: PageEvent =new PageEvent();
-    p.pageIndex = 0;
-    p.pageSize = 5;
-   this.getServerData(p);
+      const p: PageEvent =new PageEvent();
+      p.pageIndex = 0;
+      p.pageSize = 5;
+      if (this.activateRoute.queryParams['_value']) {
+        
+        if(this.activateRoute.queryParams['_value']['classId']) {
+          this.classId = this.activateRoute.queryParams['_value']['classId'];
+        }
+        if(this.activateRoute.queryParams['_value']['userId']) {
+          this.userId = this.activateRoute.queryParams['_value']['userId'];
+        }
+      }
+      this.getServerData(p);
   }
 
   public getServerData(event?:PageEvent){
     this.subRefs$.push(
-      this.serverService.getLevels(event.pageIndex, event.pageSize)
+      this.serverService.getLevels(event.pageIndex, event.pageSize, this.classId, this.userId)
       .subscribe(
         res => {
           if (res.status === 200) {
@@ -69,6 +83,19 @@ export class LevelsComponent implements OnInit {
 
   }
 
+  goUser(idUser: number) {
+    const currentUrl = '/#/users?userId=' + idUser;
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });
+  }
+
+  goClassRoom(idLevel: number) {
+    const currentUrl = '/#/classes?levelId=' + idLevel;
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });
+  }
 
   ngOnDestroy(): void {
     this.subRefs$.forEach(r => {if(r){ r.unsubscribe();} })

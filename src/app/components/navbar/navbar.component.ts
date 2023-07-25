@@ -111,9 +111,55 @@ export class NavbarComponent implements OnInit {
 
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
-      if(titlee.charAt(0) === '#'){
-          titlee = titlee.slice( 1 );
+ 
+      if(titlee.includes('#')) {
+        if(titlee.includes('?')) {
+            console.log('title');
+           var paths:string[] = titlee.split('?');
+           switch(paths[0]) {
+            case '#/users':
+
+                var params = paths[1].split('&');
+                var classId: number =  +params[0].split('=')[1];
+                var teacher: boolean = params[1].split('=')[1] === 'true';
+               
+                return `Clase ${classId} > ${teacher?'Profesores':'Estudiantes'}`;
+
+            case '#/classes': 
+
+                var params = paths[1].split('=');
+                switch(params[0]) {
+                    case 'userId':
+                        return `Alumno ${params[1]} > Clases`;
+                    case 'teacherId':
+                        return `Profesor ${params[1]} > Clases`;
+                    case 'levelId':
+                         return `Nivel ${params[1]} > Clases`;    
+                    default: 
+                        return 'Articoding';                          
+                }
+
+            case '#/levels': 
+
+                var params = paths[1].split('=');
+                switch(params[0]) {
+                    case 'classId':
+                        return `Clase ${params[1]} > Niveles`;
+                    case 'userId':
+                        return `Usuario ${params[1]} > Niveles creados`;
+                    default: 
+                        return 'Articoding';                          
+                }
+
+            default: return 'Articoding';
+           }
+        }
       }
+       if(titlee.charAt(0) === '#'){
+          titlee = titlee.slice( 1 );
+          
+      }
+
 
       for(var item = 0; item < this.listTitles.length; item++){
           if(this.listTitles[item].path === titlee){

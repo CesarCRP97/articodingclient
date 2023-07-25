@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div style="width: 60px;" class="col card-header card-header-info align-self-end"> 
-                        <a class="material-icons" style="color: white;" (click)="newlevel()">school</a>
+                        <a class="material-icons" style="color: white;" (click)="newlevel()">smart_toy</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" *ngIf="true">
@@ -28,25 +28,31 @@
                                 <ng-container matColumnDef="publicLevel">
                                     <mat-header-cell *matHeaderCellDef>Público</mat-header-cell>
                                     <mat-cell  class="description-cell"
-                                    *matCellDef="let level">{{level.publicLevel}}</mat-cell>
+                                    *matCellDef="let level">
+                                        <mat-slide-toggle  disabled="true" color="primary"
+                                        [checked]="level.publicLevel"></mat-slide-toggle> 
+                                    </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="classRooms">
                                     <mat-header-cell *matHeaderCellDef>NºClases</mat-header-cell>
-                                    <mat-cell  class="description-cell"
+                                    <mat-cell  class="description-cell" (click)="goClassRoom(level.id)"
                                     *matCellDef="let level">{{level.classRooms}}</mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="owner">
                                     <mat-header-cell *matHeaderCellDef>Creador</mat-header-cell>
-                                    <mat-cell  class="description-cell"
-                                    *matCellDef="let level">{{level.owner.name}}</mat-cell>
+                                    <mat-cell  class="description-cell" (click)="goUser(level.owner.id)"
+                                    *matCellDef="let level">{{level.owner.username}}</mat-cell>
                                 </ng-container>
-                                
+
                                 <ng-container matColumnDef="active">
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
-                                    *matCellDef="let level">{{level.active}}</mat-cell>
+                                    *matCellDef="let level">
+                                        <mat-slide-toggle  disabled="true" color="primary"
+                                        [checked]="level.active"></mat-slide-toggle>    
+                                    </mat-cell>
                                 </ng-container>
                     
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

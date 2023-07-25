@@ -28,8 +28,11 @@ export class ServerService {
     user, { observe: 'response'});
   }
 
-  getUsers(page:number, size:number):Observable<HttpResponse<IPage<IUser>>> {
-    const url = this.host + 'users?page=' + page + '&size=' + size;
+  getUsers(page:number, size:number, classId: number, teacher: boolean):Observable<HttpResponse<IPage<IUser>>> {
+    var url = this.host + 'users?page=' + page + '&size=' + size;
+    if (classId) {
+      url = url + '&class=' + classId + '&teacher=' + teacher;
+    }
     return this.http.get<IPage<IUser>>(url, 
       { observe: 'response' });
   }
@@ -40,14 +43,28 @@ export class ServerService {
       { observe: 'response' });
   }
 
-  getClassRoms(page: number, size: number):Observable<HttpResponse<IPage<IClassRoom>>> {
-    const url = this.host + 'classes?page=' + page + '&size=' + size;
+  getClassRoms(page: number, size: number,levelId: number, userId: number, teacherId: number):Observable<HttpResponse<IPage<IClassRoom>>> {
+    var url = this.host + 'classes?page=' + page + '&size=' + size;
+    if(levelId) {
+      url = url + '&level=' + levelId;
+    } else if(userId){
+      url = url + '&user=' + userId;
+    }else if(teacherId){
+      url = url + '&teacherId=' + teacherId;
+    }
+
     return this.http.get<IPage<IClassRoom>>(url, 
       { observe: 'response' });
   }
 
-  getLevels(page: number, size: number):Observable<HttpResponse<IPage<ILevel>>> {
-    const url = this.host + 'levels?page=' + page + '&size=' + size;
+  getLevels(page: number, size: number,classId: number, userId: number):Observable<HttpResponse<IPage<ILevel>>> {
+    var url = this.host + 'levels?page=' + page + '&size=' + size;
+    if(classId) {
+      url = url + '&class=' + classId;
+    } else if(userId){
+      url = url + '&user=' + userId;
+    }
+
     return this.http.get<IPage<ILevel>>(url, 
       { observe: 'response' });
   }

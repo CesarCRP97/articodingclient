@@ -22,6 +22,9 @@ import { JwtInterceptor } from 'app/JwtInterceptor';
 import { CreateUserComponent } from 'app/components/users/create-user/create-user.component';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs'
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   imports: [
@@ -42,7 +45,10 @@ import {MatTabsModule} from '@angular/material/tabs'
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
   ],
   declarations: [
     UsersComponent,

@@ -15,7 +15,8 @@ const routes: Routes =[
     children: [{
       path: '',
       loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(m => m.AdminLayoutModule)
-    }]
+    }],
+    runGuardsAndResolvers: 'always'
   },
   { path:'login', component: LoginComponent},
   { path:'**', component: PageNotFoundComponent},
@@ -29,10 +30,13 @@ const routes: Routes =[
     BrowserModule,
     MatFormFieldModule ,
     RouterModule.forRoot(routes,{
-       useHash: true
+       useHash: true,
+       enableTracing: true,
+       onSameUrlNavigation: 'reload'
     })
   ],
   exports: [
+    RouterModule
   ],
 })
 export class AppRoutingModule { }
