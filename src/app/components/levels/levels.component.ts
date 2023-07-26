@@ -84,7 +84,7 @@ export class LevelsComponent implements OnInit {
   }
 
   goUser(idUser: number) {
-    const currentUrl = '/#/users?userId=' + idUser;
+    const currentUrl = '/#/users/' + idUser;
     this.router.navigateByUrl(currentUrl).then(() => {
       window.location.reload();
     });

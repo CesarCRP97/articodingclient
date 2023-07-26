@@ -25,6 +25,9 @@ import {MatTabsModule} from '@angular/material/tabs'
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCardModule} from '@angular/material/card';
+import { UserDetailComponent } from 'app/components/users/user-detail/user-detail.component';
+import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   imports: [
@@ -49,9 +52,12 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatSidenavModule,
     MatSliderModule,
     MatSlideToggleModule,
+    MatCardModule,
+    MatExpansionModule
   ],
   declarations: [
     UsersComponent,
+    UserDetailComponent,
     CreateUserComponent,
     LevelsComponent,
     ClassesComponent

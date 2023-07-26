@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from 'app/models/IUser';
 import { IPage } from 'app/models/IPage';
@@ -38,6 +38,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['username', 'enabled', 'roles'];
   classId: number = null;
   teacher:boolean = null;
+
+  
   ngOnInit(): void {
     const p: PageEvent =new PageEvent();
     p.pageIndex = 0;
@@ -85,8 +87,14 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
 
+    });    
+  }
+
+  goUser(idUser:number) {
+    const currentUrl = '/#/users/' + idUser;
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
     });
-    
   }
 
   ngOnDestroy(): void {

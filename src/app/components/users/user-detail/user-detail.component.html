@@ -1,0 +1,96 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card" *ngIf="loaded">
+                    <div class="col card-header card-header-info align-self-end"> 
+                        {{user.username | uppercase}}
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">
+                                    <mat-slide-toggle [disabled]="read" color="primary"  
+                                    [checked]="user.enabled">Activado</mat-slide-toggle>    
+                            </div>
+                            <div class="col-3">
+                             <input [disabled]="read" matInput type="string" 
+                                    [(ngModel)]="user.username" placeholder="Nombre">
+                            </div>  
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <mat-accordion>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Clases en que tutotiza el usuario
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                holi
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+
+                                        <mat-table [dataSource]="user.ownerClassRooms" #ownerClass>
+                                            <ng-container matColumnDef="id">
+                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                                <mat-cell *matCellDef="let class">{{class.id}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let class">{{class.name}}</mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayedCreatedClassRooms"></mat-header-row>
+                                            <mat-row (click)="goClassRoom(row.id)" *matRowDef="let row; columns: displayedCreatedClassRooms"></mat-row>
+                                        </mat-table>
+                                    </mat-expansion-panel>
+
+                                    <mat-expansion-panel expanded="false">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Clases en las que participa el usuario
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <mat-table [dataSource]="user.classRooms" #classRoom>
+                                            <ng-container matColumnDef="id">
+                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                                <mat-cell *matCellDef="let class">{{class.id}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let class">{{class.name}}</mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayedCreatedClassRooms"></mat-header-row>
+                                            <mat-row (click)="goClassRoom(row.id)" *matRowDef="let row; columns: displayedCreatedClassRooms"></mat-row>
+                                        </mat-table>
+                                    </mat-expansion-panel>
+
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Niveles Creados por el usuario
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                    
+                                        <mat-table [dataSource]="user.createdLevels">
+                                            <ng-container matColumnDef="id">
+                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                                <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="title">
+                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayedCreatedLevels"></mat-header-row>
+                                            <mat-row (click)="geLevel(row.id)" *matRowDef="let row; columns: displayedCreatedLevels"></mat-row>
+                                        </mat-table>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  

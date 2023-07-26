@@ -2,18 +2,20 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { IClassRoom } from './models/IClassRoom';
-import { ILevel } from './models/Ilevel';
 import { ILink } from './models/ILink';
 import { ILogin } from './models/ilogin';
 import { IPage } from './models/IPage';
 import { IResponse } from './models/iresponse';
 import { IUser } from './models/IUser';
 import { User } from './models/User';
+import { ILevel } from './models/Ilevel';
+import { IUserDetail } from './models/IUserDetail';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerService {
+
 
   //host:string = "http://13.48.149.249:8080/";
   host:string = "http://localhost:8080/";
@@ -26,6 +28,12 @@ export class ServerService {
   login(user: ILogin): Observable<HttpResponse<IResponse>> {
     return this.http.post<IResponse>(this.host + 'login', 
     user, { observe: 'response'});
+  }
+
+  getUser(userId: number):Observable<HttpResponse<IUserDetail>> {
+    var url = this.host + 'users/' + userId;
+    return this.http.get<IUserDetail>(url, 
+      { observe: 'response' });
   }
 
   getUsers(page:number, size:number, classId: number, teacher: boolean):Observable<HttpResponse<IPage<IUser>>> {
