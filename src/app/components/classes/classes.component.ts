@@ -11,8 +11,7 @@ import { IPage } from 'app/models/IPage';
 
 @Component({
   selector: 'app-classes',
-  templateUrl: './classes.component.html',
-  styleUrls: ['./classes.component.scss']
+  templateUrl: './classes.component.html'
 })
 export class ClassesComponent implements OnInit {
 
@@ -101,6 +100,13 @@ export class ClassesComponent implements OnInit {
     this.router.navigateByUrl(currentUrl).then(() => {
       window.location.reload();
     });
+  }
+
+  goClase(classId: number) {
+    const currentUrl = '/#/classes/' + classId;
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });  
   }
 
   newClassRoom() {

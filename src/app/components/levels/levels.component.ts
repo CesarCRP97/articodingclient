@@ -11,8 +11,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-levels',
-  templateUrl: './levels.component.html',
-  styleUrls: ['./levels.component.scss']
+  templateUrl: './levels.component.html'
 })
 export class LevelsComponent implements OnInit {
 
@@ -92,6 +91,13 @@ export class LevelsComponent implements OnInit {
 
   goClassRoom(idLevel: number) {
     const currentUrl = '/#/classes?levelId=' + idLevel;
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    });
+  }
+
+  goLevel(idLevel:number) {
+    const currentUrl = '/#/levels/' + idLevel;
     this.router.navigateByUrl(currentUrl).then(() => {
       window.location.reload();
     });

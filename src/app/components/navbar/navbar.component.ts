@@ -153,11 +153,22 @@ export class NavbarComponent implements OnInit {
 
             default: return 'Articoding';
            }
+        } else if(titlee.split("/").length == 3) {
+            var paths:string[] = titlee.split("/");
+            switch(paths[1]) {
+                case 'users':
+                    return `Usuario ${paths[2]}`;
+                case 'levels':
+                    return `Nivel ${paths[2]}`;
+                case 'classes':
+                    return `Clase ${paths[2]}`;
+                default: 
+                    return 'Articoding';                          
+            }
         }
       }
        if(titlee.charAt(0) === '#'){
           titlee = titlee.slice( 1 );
-          
       }
 
 

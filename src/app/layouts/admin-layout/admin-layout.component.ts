@@ -5,6 +5,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import * as $ from "jquery";
 import { filter, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LoadingService } from 'app/LoadingService';
 
 @Component({
   selector: 'app-admin-layout',
@@ -16,8 +17,15 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   private lastPoppedUrl: string;
   private yScrollStack: number[] = [];
   subRef$: Subscription;
-  constructor( public location: Location, private router: Router, private http: HttpClient) {}
-  
+  constructor( private _loading: LoadingService, public location: Location, private router: Router, private http: HttpClient) {}
+  loading: boolean = false;
+  subscription: any;
+
+  changeLoading(b:boolean) {
+    console.log('valueee' + b);
+    this.loading = b;
+  }
+
   ngOnDestroy(): void {
     if(this.subRef$) {
       this.subRef$.unsubscribe();
@@ -25,6 +33,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._loading.navchange.subscribe(item => this.changeLoading(item));
 
       const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 

@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse } from '@angular/common/http';
+import { Observable, catchError, map } from 'rxjs';
+import { LoadingService } from './LoadingService';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor() { }
+    constructor(  private _loading: LoadingService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add auth header with jwt if account is logged in and request is to the api url
+
+        const id = Date.now();
+        
+        this._loading.setLoading(true, id + '');
+
         const token = sessionStorage.getItem('token');
         if (token) {
             request = request.clone({
@@ -24,6 +30,16 @@ export class JwtInterceptor implements HttpInterceptor {
 
         }
 
-        return next.handle(request);
+        return next.handle(request)
+        .pipe(catchError((err) => {
+            this._loading.setLoading(false, id + '');
+            return err;
+          }))
+          .pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
+            if(evt.hasOwnProperty('status')) {
+                this._loading.setLoading(false, id + '');
+            }
+            return evt;
+          }));
     }
 }

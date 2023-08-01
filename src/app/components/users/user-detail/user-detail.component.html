@@ -2,35 +2,74 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card" *ngIf="loaded">
+                <div class="card">
                     <div class="col card-header card-header-info align-self-end"> 
                         {{user.username | uppercase}}
                     </div>
                     <div class="card-body">
-                        <div class="row">
+    
+                            <form class="row" [formGroup]="formUser" (ngSubmit)="editUser()">
                             <div class="col-3">
-                                    <mat-slide-toggle [disabled]="read" color="primary"  
-                                    [checked]="user.enabled">Activado</mat-slide-toggle>    
+                                <mat-slide-toggle color="primary"  
+                                [checked]="user.enabled" 
+                                (change)="user.enabled = !user.enabled"
+                                formControlName="enabled">
+                                 Activado</mat-slide-toggle>    
                             </div>
-                            <div class="col-3">
-                             <input [disabled]="read" matInput type="string" 
-                                    [(ngModel)]="user.username" placeholder="Nombre">
-                            </div>  
-                        </div>
+                            <mat-form-field class="col-3">
+                                <mat-label>Nombre</mat-label>
+                                <input matInput [disabled]="read" matInput type="string" 
+                                [(ngModel)]="user.username" formControlName="username" 
+                                placeholder="Nombre">
+                            </mat-form-field>  
+                            <mat-form-field class="col-3">
+                                <mat-label>Contraseña</mat-label>
+                                <input matInput [disabled]="read" matInput type="string" 
+                                [(ngModel)]="user.password" formControlName="password"
+                                placeholder="Nueva Contraseña">
+                            </mat-form-field>  
+                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid">Crear</button>
+                            <div class="clearfix"></div>
+                            </form>
+                
                         <div class="row">
                             <div class="col-12">
-                                <mat-accordion>
-                                    <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-title>
-                                                Clases en que tutotiza el usuario
-                                            </mat-panel-title>
-                                            <mat-panel-description>
-                                                holi
-                                            </mat-panel-description>
-                                        </mat-expansion-panel-header>
+                                <mat-divider></mat-divider>
+                                    <h3>Niveles creadoss</h3>
+                                    <mat-table [dataSource]="user.createdLevels"  #createdLevels="matTable" createdLevels>
+                                        <ng-container matColumnDef="id">
+                                            <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="title">
+                                            <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="active">
+                                            <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.active}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="actions">
+                                            <mat-header-cell *matHeaderCellDef>Visibilidad</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">
+                                                <a *ngIf="level.active" class="material-icons"
+                                                style="color: green;" matTooltip="Deshabilitar nivel"
+                                                    (click)="toDisable(level.id)">visibility</a>
+                                                <a *ngIf="!level.active" class="material-icons" 
+                                                style="color: red;" matTooltip="Habilitar nivel"
+                                                    (click)="toEnable(level.id)">disabled_visible</a>
+                                                <a  class="material-icons"
+                                                style="color: #2196f3"  matTooltip="Ver detalle de nivel"
+                                                    (click)="goLevel(level.id)">search</a>
+                                            </mat-cell>
+                                        </ng-container>
+                                        <mat-header-row *matHeaderRowDef="displayedCreatedLevels"></mat-header-row>
+                                        <mat-row  *matRowDef="let row; columns: displayedCreatedLevels"></mat-row>
+                                    </mat-table>
 
-                                        <mat-table [dataSource]="user.ownerClassRooms" #ownerClass>
+                                <mat-divider></mat-divider>
+                                    <h3>Clases tutorizadas</h3>
+                                    <mat-table [dataSource]="user.ownerClassRooms" #ownerClass="matTable" ownerClass>
                                             <ng-container matColumnDef="id">
                                                 <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                                 <mat-cell *matCellDef="let class">{{class.id}}</mat-cell>
@@ -41,16 +80,11 @@
                                             </ng-container>
                                             <mat-header-row *matHeaderRowDef="displayedCreatedClassRooms"></mat-header-row>
                                             <mat-row (click)="goClassRoom(row.id)" *matRowDef="let row; columns: displayedCreatedClassRooms"></mat-row>
-                                        </mat-table>
-                                    </mat-expansion-panel>
-
-                                    <mat-expansion-panel expanded="false">
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-title>
-                                                Clases en las que participa el usuario
-                                            </mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        <mat-table [dataSource]="user.classRooms" #classRoom>
+                                    </mat-table>
+   
+                                <mat-divider></mat-divider>
+                                    <h3>Clases matriculadas</h3>
+                                    <mat-table [dataSource]="user.classRooms" #classRoom="matTable" classRoom>
                                             <ng-container matColumnDef="id">
                                                 <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                                 <mat-cell *matCellDef="let class">{{class.id}}</mat-cell>
@@ -61,30 +95,8 @@
                                             </ng-container>
                                             <mat-header-row *matHeaderRowDef="displayedCreatedClassRooms"></mat-header-row>
                                             <mat-row (click)="goClassRoom(row.id)" *matRowDef="let row; columns: displayedCreatedClassRooms"></mat-row>
-                                        </mat-table>
-                                    </mat-expansion-panel>
+                                    </mat-table>
 
-                                    <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-title>
-                                                Niveles Creados por el usuario
-                                            </mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                    
-                                        <mat-table [dataSource]="user.createdLevels">
-                                            <ng-container matColumnDef="id">
-                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
-                                                <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
-                                            </ng-container>
-                                            <ng-container matColumnDef="title">
-                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-                                                <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
-                                            </ng-container>
-                                            <mat-header-row *matHeaderRowDef="displayedCreatedLevels"></mat-header-row>
-                                            <mat-row (click)="geLevel(row.id)" *matRowDef="let row; columns: displayedCreatedLevels"></mat-row>
-                                        </mat-table>
-                                    </mat-expansion-panel>
-                                </mat-accordion>
                             </div>
                         </div>
                     </div>
@@ -92,5 +104,5 @@
             </div>
         </div>
     </div>
-  </div>
+</div>
   

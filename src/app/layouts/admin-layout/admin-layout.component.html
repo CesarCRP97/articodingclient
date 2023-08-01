@@ -1,4 +1,7 @@
 <div class="wrapper">
+    <div *ngIf="loading" class="loading-container flex-content-center">
+        <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+    </div>
     <div class="sidebar" data-color="azure" data-background-color="white">
         <app-sidebar></app-sidebar>
       

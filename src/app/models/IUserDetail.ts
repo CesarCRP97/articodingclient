@@ -2,7 +2,7 @@ import { IClassRoom } from "./IClassRoom";
 import { IRole } from "./IRole";
 import { ILevel } from "./Ilevel";
 
-export interface IUserDetail {
+export interface IUserDetail{
     id: number;
     username: string;
     enabled: boolean;
@@ -10,4 +10,5 @@ export interface IUserDetail {
     createdLevels: ILevel[];
     classRooms: IClassRoom[];
     ownerClassRooms: IClassRoom[];
+    password: string;
 }

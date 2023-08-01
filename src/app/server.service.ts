@@ -51,6 +51,11 @@ export class ServerService {
       { observe: 'response' });
   }
 
+  putUser(id:number, json:object):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'users/' + id;
+    return this.http.put<ILink>(url, json, { observe: 'response' });
+  }
+
   getClassRoms(page: number, size: number,levelId: number, userId: number, teacherId: number):Observable<HttpResponse<IPage<IClassRoom>>> {
     var url = this.host + 'classes?page=' + page + '&size=' + size;
     if(levelId) {
@@ -77,5 +82,9 @@ export class ServerService {
       { observe: 'response' });
   }
   
+  putLevel(id:number, json:object):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'levels/' + id;
+    return this.http.put<ILink>(url, json, { observe: 'response' });
+  }
 
 }

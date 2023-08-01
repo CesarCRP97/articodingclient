@@ -25,9 +25,16 @@ import {MatTabsModule} from '@angular/material/tabs'
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatCardModule} from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { UserDetailComponent } from 'app/components/users/user-detail/user-detail.component';
 import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
+import { ConfirmDialogComponent } from 'app/components/confirm-dialog/confirm-dialog.component';
+import { LevelDetailComponent } from 'app/components/levels/level-detail/level-detail.component';
+import { ClaseDetailComponent } from 'app/components/classes/clase-detail/clase-detail.component';
+import { LoadingService } from 'app/LoadingService';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -53,18 +60,27 @@ import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
     MatSliderModule,
     MatSlideToggleModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatDividerModule
   ],
   declarations: [
     UsersComponent,
     UserDetailComponent,
     CreateUserComponent,
     LevelsComponent,
-    ClassesComponent
+    LevelDetailComponent,
+    ClassesComponent,
+    ClaseDetailComponent,
+    ConfirmDialogComponent,
+    
   ],
-  providers: [
+  providers: [    
     ServerService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    
   ]
 })
 
