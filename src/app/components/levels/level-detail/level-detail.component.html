@@ -1,1 +1,55 @@
-<p>level-detail works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="col card-header card-header-info align-self-end"> 
+                        {{level.title | uppercase}}
+                    </div>
+                    <div class="card-body">
+    
+                        <form [formGroup]="formLevel" (ngSubmit)="editLevel()">
+                            <div class="row">
+                                <mat-form-field class="col-3">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput disabled matInput type="string" 
+                                    [(ngModel)]="level.title" formControlName="title" 
+                                    placeholder="Nombre">
+                                </mat-form-field>
+                                <div class="col-3">
+                                    <mat-slide-toggle color="primary"  
+                                    [checked]="level.active" 
+                                    (change)="level.active = !level.active"
+                                    formControlName="active">
+                                    Activado</mat-slide-toggle>    
+                                </div>
+                                <div class="col-3">
+                                    <mat-slide-toggle color="primary"  
+                                    [checked]="level.publicLevel" 
+                                    (change)="level.publicLevel = !level.publicLevel"
+                                    formControlName="publicLevel">
+                                    Público</mat-slide-toggle>    
+                                </div>
+                            </div>
+                            <div class="row">
+                                <mat-form-field class="col-8">
+                                    <mat-label>Descripción</mat-label>
+                                    <input matInput matInput type="string" 
+                                    [(ngModel)]="level.description" formControlName="description"
+                                    placeholder="Descripción">
+                                </mat-form-field>
+                                <div class="col-8">
+                                    Incuido en {{level.classRooms}} clases
+                                    <a class="material-icons" *ngIf="level.classRooms > 0" style="color: #00bcd4;" (click)="goClassRooms()">school</a>
+                                </div>
+                            </div>
+                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formLevel.valid">Editar</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

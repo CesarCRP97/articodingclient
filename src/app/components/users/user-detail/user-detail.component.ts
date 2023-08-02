@@ -28,12 +28,9 @@ export class UserDetailComponent implements OnInit {
     subRefs$: Subscription[] = [];
     user: IUserDetail = new UserDetail();
     userId:number;
-    loaded = false;
-    read = true;
     displayedCreatedLevels: string[] = ['id', 'title', 'active', 'actions'];
     displayedCreatedClassRooms: string[] = ['id', 'name'];
     formUser: FormGroup;
-    @ViewChild('createdLevels') createdLevels: MatTable<any>;
 
   ngOnInit(): void {
   this.userId = this.activateRoute['_routerState'].snapshot.url.split('/')[2];
@@ -57,7 +54,6 @@ export class UserDetailComponent implements OnInit {
               password: [''],
               enabled: [this.user.enabled],
             });
-            this.loaded = true;
           } else {
             alert('Algo ha pasado... ' + res.status);
           }
@@ -71,7 +67,6 @@ export class UserDetailComponent implements OnInit {
   }
 
   editUser() {
-    debugger
     this.subRefs$.push(
       this.serverService.putUser(this.user.id, 
         { 
@@ -82,13 +77,11 @@ export class UserDetailComponent implements OnInit {
       ).subscribe(  res => {
         if (res.status === 200) {
           this.getUser();
-        } else {
-          alert('Algo ha pasado... ' + res.status);
-        }
-      }, err => {
-        alert('Algo ha pasado... ' + err);
-      })
-      );
+        } else alert('Algo ha pasado... ' + res.status);
+
+      }, err => alert('Algo ha pasado... ' + err)
+      )
+    );
   }
 
   goLevel(idLevel: number) {

@@ -10,6 +10,7 @@ import { IUser } from './models/IUser';
 import { User } from './models/User';
 import { ILevel } from './models/Ilevel';
 import { IUserDetail } from './models/IUserDetail';
+import { LevelDetail } from './models/LevelDetail';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,12 @@ export class ServerService {
 
     return this.http.get<IPage<ILevel>>(url, 
       { observe: 'response' });
+  }
+
+  getLevel(levelId: number):Observable<HttpResponse<LevelDetail>> {
+      var url = this.host + 'levels/' + levelId;
+      return this.http.get<LevelDetail>(url, 
+        { observe: 'response' });
   }
   
   putLevel(id:number, json:object):Observable<HttpResponse<ILink>> {

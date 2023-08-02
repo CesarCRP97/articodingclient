@@ -18,17 +18,17 @@
                             </div>
                             <mat-form-field class="col-3">
                                 <mat-label>Nombre</mat-label>
-                                <input matInput [disabled]="read" matInput type="string" 
+                                <input matInput disabled matInput type="string" 
                                 [(ngModel)]="user.username" formControlName="username" 
                                 placeholder="Nombre">
                             </mat-form-field>  
                             <mat-form-field class="col-3">
                                 <mat-label>Contraseña</mat-label>
-                                <input matInput [disabled]="read" matInput type="string" 
+                                <input matInput matInput type="string" 
                                 [(ngModel)]="user.password" formControlName="password"
                                 placeholder="Nueva Contraseña">
                             </mat-form-field>  
-                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid">Crear</button>
+                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid">Editar</button>
                             <div class="clearfix"></div>
                             </form>
                 
