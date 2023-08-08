@@ -9,7 +9,6 @@ import { Observable, Subscription } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateUserComponent } from './create-user/create-user.component';
 
 @Component({
   selector: 'app-users',
@@ -69,9 +68,7 @@ export class UsersComponent implements OnInit, OnDestroy {
           } else {
             alert('Algo ha pasado... ' + res.status);
           }
-        }, err => {
-          alert('Algo ha pasado... ' + err);
-        }
+        }, err => alert(err.error.message)
 
        // this.changeDetectorRefs.detectChanges();
       )
@@ -80,13 +77,10 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   newUser() {
-    const dialogRef = this.dialog.open(CreateUserComponent, {
-      data: {},
+    const currentUrl = '/#/users/new';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });    
   }
 
   goUser(idUser:number) {

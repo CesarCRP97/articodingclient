@@ -99,7 +99,7 @@ export class ClaseDetailComponent implements OnInit {
           if (res.status === 200) {
             this.getClassRoom();
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
         )
       );
     } else {

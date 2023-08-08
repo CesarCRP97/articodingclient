@@ -54,6 +54,12 @@ export class ServerService {
       { observe: 'response' });
   }
 
+  createUsers(users: User[]) {
+    const url = this.host + 'users/list';
+    return this.http.post<ILink>(url, users,
+      { observe: 'response' });
+  }
+
   putUser(id:number, json:object):Observable<HttpResponse<ILink>> {
     const url = this.host + 'users/' + id;
     return this.http.put<ILink>(url, json, { observe: 'response' });

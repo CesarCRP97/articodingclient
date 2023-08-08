@@ -1,30 +1,48 @@
-<h1 mat-dialog-title>Nuevo/s Usuario/s</h1>
-<div mat-dialog-content>
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Simple">
-            <form [formGroup]="formUser"  (ngSubmit)="CreateSimpleUser()">
-                <mat-form-field>
-                    <input matInput formControlName="username" type="string" [(ngModel)]="user.username" placeholder="Nombre">
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput placeholder="Password" type="password" [(ngModel)]="user.password" formControlName="password" required>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Roles</mat-label>
-                    <mat-select formControlName="roles" [(ngModel)]="rol" required>
-                      <mat-option value="ROLE_USER">Usuario</mat-option>
-                      <mat-option value="ROLE_TEACHER">Profesor</mat-option>
-                      <mat-option value="ROLE_ADMIN">Administrador</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid" 
-                  matDialogClose>Crear</button>
-                  <div class="clearfix"></div>
-            </form>
-                           
-        </mat-tab>
-        <mat-tab label="Avanzado">
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="col card-header card-header-info align-self-end"> 
+                       {{simple?  ' Añadir usuario ' : ' Añadir usuarios avanzado ' }}
+                    </div>
+                    <div class="card-body">
+                        <button mat-raised-button class="btn btn-info pull-center" (click)="simple = !simple">
+                        {{!simple ? 'IR A SIMPLE' : 'IR A MODO AVANZADO'}}</button>
 
-        </mat-tab>
-      </mat-tab-group>
+                        <div label="Simple" [hidden]="!simple">
+                            <form [formGroup]="formUser"  (ngSubmit)="CreateSimpleUser()">
+                                <mat-form-field>
+                                    <input matInput formControlName="username" type="string" [(ngModel)]="user.username" placeholder="Nombre">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput placeholder="Password" type="password" [(ngModel)]="user.password" formControlName="password" required>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Roles</mat-label>
+                                    <mat-select formControlName="roles" [(ngModel)]="rol" required>
+                                        <mat-option value="ROLE_TEACHER">Profesor</mat-option>
+                                        <mat-option value="ROLE_ADMIN">Administrador</mat-option>
+                                    </mat-select>
+                                    </mat-form-field>
+                                    <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid" >Crear</button>
+                                    <div class="clearfix"></div>
+                            </form>   
+                        </div>
+                        <div label="Avanzado" [hidden]="simple">
+                            <mat-form-field class="row">
+                                <textarea [(ngModel)]="advanceUser" matInput rows="5" cols="40" placeholder="text"></textarea>
+                            </mat-form-field>
+                            <button mat-raised-button class="btn btn-info pull-center" 
+                            (click)="CreateAdvanceUser()" >Crear</button>
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+    <mat-option value="ROLE_USER">Usuario</mat-option>
+                                      

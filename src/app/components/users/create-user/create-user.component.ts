@@ -1,13 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { User } from 'app/models/User';
 import { Router } from '@angular/router';
 import { ServerService } from 'app/server.service';
 import { Subscription } from 'rxjs';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-create-user',
@@ -15,9 +12,13 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class CreateUserComponent implements OnInit {
   formUser: FormGroup;
+  formAdvanceUser: FormGroup;
+
+  advanceUser: string = '' ;
+  simple:boolean = true;
+
   constructor( private formBuilder: FormBuilder,
     private serverService: ServerService,
-    public dialogRef: MatDialogRef<CreateUserComponent>,
     private router: Router) { }
     subRefs$: Subscription[] = [];
 
@@ -33,24 +34,68 @@ export class CreateUserComponent implements OnInit {
   }
 
   CreateSimpleUser() {
-  this.user.roles.push(this.rol);
-    this.subRefs$.push(
-      this.serverService.createUser(this.user)
-      .subscribe(  res => {
-        if (res.status === 200) {
-          alert('creado!')
-          this.dialogRef.close();
-        } else {
-          alert('Algo ha pasado... ' + res.status);
-        }
-      }, err => {
-        alert('Algo ha pasado... ' + err);
-      })
+    this.user.roles.push(this.rol);
+      this.subRefs$.push(
+        this.serverService.createUser(this.user)
+        .subscribe(  res => {
+          if (res.status === 200) {
+            const currentUrl = '/#' + res.body.link;
+            this.router.navigateByUrl(currentUrl).then(() => {
+              window.location.reload();
+            });
+          } else {
+            alert('Algo ha pasado... ' + res.status);
+          }
+        }, err => {
+          alert('Algo ha pasado... ' + err);
+        })
       );
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  CreateAdvanceUser() { 
+    var lines: string[] = this.advanceUser.split('\n');
+    const users: User[] = [];
+    lines.forEach(line => {
+      var columns: string[] = line.split(';');
+      if(columns.length == 1 && columns[0] === "") {
+
+      } else {
+        if (columns.length < 3) {
+          this.addError();
+       }
+       const newUser:User = new User();
+       newUser.username = columns[0];
+       newUser.password = columns[1];
+       var roles: string[] = [];
+       roles.push(columns[2]);
+       newUser.roles = roles;
+       newUser.enabled = true;
+       if (columns.length > 3) {
+        var clases: number[];
+        clases = columns[3].split(',').map(n => Number(n));
+        newUser.classes = clases;
+       }
+       users.push(newUser);
+      }
+    });
+
+    this.subRefs$.push(
+      this.serverService.createUsers(users)
+      .subscribe(  res => {
+        if (res.status === 200) {
+          const currentUrl = '/#' + res.body.link;
+          this.router.navigateByUrl(currentUrl).then(() => {
+            window.location.reload();
+          });
+        } else {
+          alert('Algo ha pasado... ' + res.status);
+        }
+      }, err => alert(err.error.message))
+    );
+  }
+
+  addError() {
+
   }
 
 }
