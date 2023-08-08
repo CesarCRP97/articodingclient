@@ -59,7 +59,7 @@ export class ClassesComponent implements OnInit {
 
   public getServerData(event?:PageEvent){
     this.subRefs$.push(
-      this.serverService.getClassRoms(event.pageIndex, event.pageSize, this.levelId, this.userId, this.teacherId)
+      this.serverService.getClassRooms(event.pageIndex, event.pageSize, this.levelId, this.userId, this.teacherId)
       .subscribe(
         res => {
           if (res.status === 200) {
@@ -110,7 +110,10 @@ export class ClassesComponent implements OnInit {
   }
 
   newClassRoom() {
-
+    const currentUrl = '/#/classes/new';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      window.location.reload();
+    }); 
   }
 
 

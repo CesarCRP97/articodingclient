@@ -13,8 +13,7 @@ import { CreateUserComponent } from './create-user/create-user.component';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  templateUrl: './users.component.html'
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
@@ -35,7 +34,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   length:number;
   users: IUser[];
   loadTable:boolean = false;
-  displayedColumns: string[] = ['username', 'enabled', 'roles'];
+  displayedColumns: string[] = ['id', 'username', 'enabled', 'roles'];
   classId: number = null;
   teacher:boolean = null;
 
@@ -86,7 +85,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      console.log('The dialog was closed');
     });    
   }
 

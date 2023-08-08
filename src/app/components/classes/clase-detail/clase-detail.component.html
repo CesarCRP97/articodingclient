@@ -1,1 +1,177 @@
-<p>clase-detail works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12" *ngIf="classRoom">
+                <div class="card">
+                    <div class="col card-header card-header-info align-self-end"> 
+                        {{(classRoom ? classRoom.name: '') | uppercase}}
+                    </div>
+                    <div class="card-body">
+    
+                            <form style="width: 100%;" [formGroup]="formClassRoom" (ngSubmit)="editClassRoom()">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <mat-slide-toggle color="primary"  
+                                        [checked]="classRoom.enabled" 
+                                        (change)="classRoom.enabled = !classRoom.enabled"
+                                        formControlName="enabled">
+                                         Activado</mat-slide-toggle>    
+                                    </div>
+                                    <mat-form-field class="col-6">
+                                        <mat-label>Nombre</mat-label>
+                                        <input matInput matInput type="string" 
+                                        [(ngModel)]="classRoom.name" formControlName="name" 
+                                        placeholder="Nombre">
+                                    </mat-form-field>  
+
+                                </div>
+                                <div class="row">
+                                    <mat-form-field class="col-9">
+                                        <mat-label>Descripción</mat-label>
+                                        <input matInput matInput type="string" 
+                                        [(ngModel)]="classRoom.description" formControlName="description" 
+                                        placeholder="Descripción">
+                                    </mat-form-field>  
+                                    <button mat-raised-button class="btn btn-info pull-center" type="submit" 
+                                    [disabled]="!(formClassRoom.valid && formClassRoom.dirty)">
+                                    {{isNew ? 'Guardar' : 'Editar'}}</button>
+                                </div>
+                            <div class="clearfix"></div>
+                            </form>
+                
+                        <div class="row" *ngIf="!isNew">
+                            <div class="col-12">
+                                <mat-divider></mat-divider>
+                                    <h3>Niveles</h3>
+                                    <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
+                                        <mat-form-field class="col-6">
+                                            <mat-label>Añadir nuevos niveles</mat-label>
+                                            <input matInput type="string" 
+                                            [(ngModel)]="newLevels" formControlName="newLevels" 
+                                            placeholder="1,6,15">
+                                            <div *ngIf="newLevels && !newLevels.valid">{{newLevels.errors| json}}</div>
+                                        </mat-form-field>
+                                        <button style="border: 0; background: transparent;">
+                                            <a [disabled]="!(formLevels.valid && formLevels.dirty)" 
+                                            type="submit"
+                                            class="material-icons" style="color: #00bcd4;">add</a>
+                                        </button> 
+                                
+                                    </form>
+                                    <mat-table [dataSource]="classRoom.levels"  #levels="matTable" levels>
+                                        <ng-container matColumnDef="id">
+                                            <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="title">
+                                            <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="active">
+                                            <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.active}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="actions">
+                                            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">
+                                                <a class="material-icons"
+                                                style="color: rgba(252, 59, 59, 0.635)"  matTooltip="Borrar nivel de la clase"
+                                                    (click)="deleteLevel(level.id)">delete</a>
+                                                <a class="material-icons"
+                                                    style="color: #2196f3"  matTooltip="Ver detalle de nivel"
+                                                        (click)="goLevel(level.id)">search</a>
+                                            </mat-cell>
+                                        </ng-container>
+                                        <mat-header-row *matHeaderRowDef="displayedLevels"></mat-header-row>
+                                        <mat-row  *matRowDef="let row; columns: displayedLevels"></mat-row>
+                                    </mat-table>
+
+                                <mat-divider></mat-divider>
+                                    <h3>Profesores</h3>
+                                    <form class="row" style="width: 100%;" [formGroup]="formTeachers" (ngSubmit)="addTeachers()">
+                                        <mat-form-field class="col-6">
+                                            <mat-label>Añadir nuevos profesores</mat-label>
+                                            <input matInput type="string" 
+                                            [(ngModel)]="newTeachers" formControlName="newTeachers" 
+                                            placeholder="1,6,15">
+                                            <div *ngIf="newTeachers && !newTeachers.valid">{{newTeachers.errors| json}}</div>
+                                        </mat-form-field>
+                                        <button style="border: 0; background: transparent;">
+                                            <a [disabled]="!(formTeachers.valid && formTeachers.dirty)" 
+                                            type="submit"
+                                            class="material-icons" style="color: #00bcd4;">add</a>
+                                        </button> 
+                                    </form>
+                                    <mat-table [dataSource]="classRoom.teachers" #teachers="matTable" teachers>
+                                            <ng-container matColumnDef="id">
+                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                                <mat-cell *matCellDef="let teacher">{{teacher.id}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="username">
+                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let teacher">{{teacher.username}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="actions">
+                                                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                                <mat-cell *matCellDef="let teacher">
+                                                    <a class="material-icons"
+                                                    style="color: rgba(252, 59, 59, 0.635)"  matTooltip="Borrar profesor de la clase"
+                                                        (click)="deleteTeacher(teacher.id)">delete</a>
+                                                    <a class="material-icons"
+                                                        style="color: #2196f3"  matTooltip="Ver detalle de nivel"
+                                                            (click)="goUser(teacher.id)">search</a>     
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedUser"></mat-row>
+                                    </mat-table>
+   
+                                <mat-divider></mat-divider>
+                                    <h3>Alumnos</h3>
+                                    <form class="row" style="width: 100%;" [formGroup]="formStudents" (ngSubmit)="addStudents()">
+                                        <mat-form-field class="col-6">
+                                            <mat-label>Añadir nuevos usuarios</mat-label>
+                                            <input matInput type="string" 
+                                            [(ngModel)]="newStudents" formControlName="newStudents" 
+                                            placeholder="1,6,15">
+                                            <div *ngIf="newStudents && !newStudents.valid">{{newStudents.errors| json}}</div>
+                                        </mat-form-field>
+                                        <button style="border: 0; background: transparent;">
+                                            <a [disabled]="!(formStudents.valid && formStudents.dirty)" 
+                                            type="submit"
+                                            class="material-icons" style="color: #00bcd4;">add</a>
+                                        </button> 
+                                    </form>
+                                    <mat-table [dataSource]="classRoom.students" #students="matTable" students>
+                                            <ng-container matColumnDef="id">
+                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                                <mat-cell *matCellDef="let student">{{student.id}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="username">
+                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let student">{{student.username}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="actions">
+                                                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                                <mat-cell *matCellDef="let student">
+                                                    <a class="material-icons"
+                                                    style="color: rgba(252, 59, 59, 0.635)"  matTooltip="Borrar estudiante de la clase"
+                                                        (click)="deleteStudent(student.id)">delete</a>
+                                                    <a class="material-icons"
+                                                        style="color: #2196f3"  matTooltip="Ver detalle de nivel"
+                                                            (click)="goUser(student.id)">search</a>     
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedUser"></mat-row>
+                                    </mat-table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

@@ -72,8 +72,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LevelsComponent,
     LevelDetailComponent,
     ClassesComponent,
-    ClaseDetailComponent,
-    ConfirmDialogComponent,
+    ClaseDetailComponent
     
   ],
   providers: [    

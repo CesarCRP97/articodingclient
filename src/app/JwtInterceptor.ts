@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse } from '@angular/common/http';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { LoadingService } from './LoadingService';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class JwtInterceptor implements HttpInterceptor {
         return next.handle(request)
         .pipe(catchError((err) => {
             this._loading.setLoading(false, id + '');
-            return err;
+            return throwError(err);
           }))
           .pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
             if(evt.hasOwnProperty('status')) {
