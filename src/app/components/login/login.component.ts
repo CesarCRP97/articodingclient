@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   subRef$: Subscription;
   isError: boolean = false;
   errorMensaje; string;
-  
+  hide = true;
   constructor(
     private formBuilder: FormBuilder,
     private serverService: ServerService,
