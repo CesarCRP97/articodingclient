@@ -45,7 +45,7 @@ export class LevelDetailComponent implements OnInit {
               classRooms: [this.level.classRooms]
             });
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
       )
     );
   }
@@ -63,7 +63,7 @@ export class LevelDetailComponent implements OnInit {
         if (res.status === 200) {
           this.getLevel();
         } else alert('Algo ha pasado... ' + res.status);
-      }, err => alert('Algo ha pasado... ' + err)
+      }, err => alert(err.error.message)
       )
     );
   }

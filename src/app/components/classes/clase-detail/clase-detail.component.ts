@@ -81,7 +81,7 @@ export class ClaseDetailComponent implements OnInit {
               enabled: [this.classRoom.enabled]
             });
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
       )
     );
   }
@@ -119,7 +119,7 @@ export class ClaseDetailComponent implements OnInit {
               window.location.reload();
             });
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
         )
       );
     }
@@ -141,9 +141,7 @@ export class ClaseDetailComponent implements OnInit {
               this.formLevels.reset();
               this.getClassRoom();
             } else alert('Algo ha pasado... ' + res.status);
-          }, err => {
-            alert(err.error.message)
-          }
+          }, err => alert(err.error.message)
         )
       );
     }
@@ -157,7 +155,7 @@ export class ClaseDetailComponent implements OnInit {
           if (res.status === 200) {
             this.getClassRoom();
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
       )
     );
   }
@@ -177,9 +175,7 @@ export class ClaseDetailComponent implements OnInit {
               this.formTeachers.reset();
               this.getClassRoom();
             } else alert('Algo ha pasado... ' + res.status);
-          }, err => {
-            alert(err.error.message)
-          }
+          }, err => alert(err.error.message)
         )
       );
     }
@@ -193,7 +189,7 @@ export class ClaseDetailComponent implements OnInit {
           if (res.status === 200) {
             this.getClassRoom();
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
       )
     );
   }
@@ -213,9 +209,7 @@ export class ClaseDetailComponent implements OnInit {
               this.formStudents.reset();
               this.getClassRoom();
             } else alert('Algo ha pasado... ' + res.status);
-          }, err => {
-            alert(err.error.message)
-          }
+          }, err => alert(err.error.message)
         )
       );
     }
@@ -229,7 +223,7 @@ export class ClaseDetailComponent implements OnInit {
           if (res.status === 200) {
             this.getClassRoom();
           } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert('Algo ha pasado... ' + err)
+        }, err => alert(err.error.message)
       )
     );
   }

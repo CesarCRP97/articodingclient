@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   length:number;
   users: IUser[];
   loadTable:boolean = false;
-  displayedColumns: string[] = ['id', 'username', 'enabled', 'roles'];
+  displayedColumns: string[] = ['id', 'username', 'enabled', 'role'];
   classId: number = null;
   teacher:boolean = null;
 

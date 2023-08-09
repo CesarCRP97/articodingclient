@@ -7,7 +7,7 @@ export class UserDetail implements IUserDetail {
     id: number;
     username: string;
     enabled: boolean;
-    roles: IRole[];
+    role: IRole;
     createdLevels: ILevel[];
     classRooms: IClassRoom[];
     ownerClassRooms: IClassRoom[];
@@ -15,7 +15,7 @@ export class UserDetail implements IUserDetail {
     constructor() {
         this.username = '';
         this.enabled = true;
-        this.roles = [];
+        this.role = { name: ''};
         this.createdLevels = [];
         this.classRooms = [];
         this.ownerClassRooms = [];

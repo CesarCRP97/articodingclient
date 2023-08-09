@@ -23,18 +23,18 @@ export class CreateUserComponent implements OnInit {
     subRefs$: Subscription[] = [];
 
   user: User;
-  rol: string;
+  role: string;
   ngOnInit(): void {
     this.user = new User();
     this.formUser = this.formBuilder.group({
       username: [this.user.username, Validators.required],
       password: [this.user.password, Validators.required],
-      roles: [this.rol, Validators.required]
+      role: [this.user.role, Validators.required]
     });
   }
 
   CreateSimpleUser() {
-    this.user.roles.push(this.rol);
+    this.user.role = this.role;
       this.subRefs$.push(
         this.serverService.createUser(this.user)
         .subscribe(  res => {
@@ -46,9 +46,8 @@ export class CreateUserComponent implements OnInit {
           } else {
             alert('Algo ha pasado... ' + res.status);
           }
-        }, err => {
-          alert('Algo ha pasado... ' + err);
-        })
+        }, err => alert(err.error.message))
+      
       );
   }
 
@@ -66,9 +65,7 @@ export class CreateUserComponent implements OnInit {
        const newUser:User = new User();
        newUser.username = columns[0];
        newUser.password = columns[1];
-       var roles: string[] = [];
-       roles.push(columns[2]);
-       newUser.roles = roles;
+       newUser.role = columns[2];
        newUser.enabled = true;
        if (columns.length > 3) {
         var clases: number[];

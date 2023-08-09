@@ -68,9 +68,7 @@ export class LevelsComponent implements OnInit {
           } else {
             alert('Algo ha pasado... ' + res.status);
           }
-        }, err => {
-          alert('Algo ha pasado... ' + err);
-        }
+        }, err => alert(err.error.message)
 
        // this.changeDetectorRefs.detectChanges();
       )
