@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           const token = response.body.token;
             console.log('Token -> ', token);
             sessionStorage.setItem('token','Bearer ' + token );
+            sessionStorage.setItem('username', this.formLogin.value.username)
             this.router.navigate(['/users'])
         } else {
 

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
     private listTitles: any[];
+    username: string = 'Jonh Doe';
     location: Location;
       mobile_menu_visible: any = 0;
     private toggleButton: any;
@@ -21,6 +22,7 @@ export class NavbarComponent implements OnInit {
     }
 
     ngOnInit(){
+      this.username = sessionStorage.getItem('username');
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
