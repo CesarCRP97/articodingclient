@@ -27,7 +27,7 @@ export class CreateUserComponent implements OnInit {
   ngOnInit(): void {
     this.user = new User();
     this.formUser = this.formBuilder.group({
-      username: [this.user.username, Validators.required],
+      username: [this.user.username, [Validators.required,  Validators.pattern("^[a-zA-Z0-9-_]+$")]],
       password: [this.user.password, Validators.required],
       role: [this.user.role, Validators.required]
     });
