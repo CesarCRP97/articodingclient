@@ -43,7 +43,7 @@
                                     <a class="material-icons" *ngIf="level.classRooms > 0" style="color: #00bcd4;" (click)="goClassRooms()">school</a>
                                 </div>
                             </div>
-                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formLevel.valid">Editar</button>
+                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formLevel.valid">Guardar</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
@@ -52,4 +52,8 @@
         </div>
     </div>
 </div>
-  
+<style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+  </style>

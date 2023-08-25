@@ -17,6 +17,13 @@ export class JwtInterceptor implements HttpInterceptor {
         this._loading.setLoading(true, id + '');
 
         const token = sessionStorage.getItem('token');
+        const role = sessionStorage.getItem('role');
+        if (role == 'ROLE_USER') {
+            const currentUrl = '/#/login';
+            this.router.navigateByUrl(currentUrl).then(() => {
+              window.location.reload();
+            });
+        }
         if (token) {
             request = request.clone({
                 setHeaders: {

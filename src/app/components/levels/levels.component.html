@@ -26,8 +26,11 @@
                                     <mat-header-cell *matHeaderCellDef>Público</mat-header-cell>
                                     <mat-cell  class="description-cell"
                                     *matCellDef="let level">
-                                        <mat-slide-toggle  disabled="true" color="primary"
-                                        [checked]="level.publicLevel"></mat-slide-toggle> 
+                                    <a *ngIf="level.publicLevel" class="material-icons"
+                                    style="color: rgb(109, 150, 109);" matTooltip="Público">lock_open</a>
+                                    <a *ngIf="!level.publicLevel" class="material-icons" 
+                                    style="color: rgb(165, 111, 111);" matTooltip="Privado">lock</a>
+
                                     </mat-cell>
                                 </ng-container>
 
@@ -47,8 +50,10 @@
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
                                     *matCellDef="let level">
-                                        <mat-slide-toggle  disabled="true" color="primary"
-                                        [checked]="level.active"></mat-slide-toggle>    
+                                        <a *ngIf="level.active" class="material-icons"
+                                        style="color: rgb(109, 150, 109);" matTooltip="Habilitado">visibility</a>
+                                        <a *ngIf="!level.active" class="material-icons" 
+                                        style="color: rgb(165, 111, 111);" matTooltip="Deshabilitado">disabled_visible</a>
                                     </mat-cell>
                                 </ng-container>
                     
@@ -67,4 +72,8 @@
         </div>
     </div>
   </div>
-  
+  <style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+  </style>

@@ -21,8 +21,9 @@
                                 <mat-form-field>
                                     <mat-label>Roles</mat-label>
                                     <mat-select formControlName="role" [(ngModel)]="role" required>
-                                        <mat-option value="ROLE_TEACHER">Profesor</mat-option>
-                                        <mat-option value="ROLE_ADMIN">Administrador</mat-option>
+                                        <mat-option *ngIf="isAdmin" value="ROLE_TEACHER">Profesor</mat-option>
+                                        <mat-option *ngIf="isAdmin" value="ROLE_ADMIN">Administrador</mat-option>
+                                        <mat-option *ngIf="isTeacher || isAdmin" value="ROLE_USER">User</mat-option>
                                     </mat-select>
                                     </mat-form-field>
                                     <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid" >Crear</button>
@@ -30,8 +31,36 @@
                             </form>   
                         </div>
                         <div label="Avanzado" [hidden]="simple">
-                            <mat-form-field class="row">
-                                <textarea [(ngModel)]="advanceUser" matInput rows="5" cols="40" placeholder="text"></textarea>
+                            <div class="row" style="margin: 20px;
+                            padding: 10px;
+                            background-color: rgb(7 176 197 / 14%);
+                            border-radius: 15px;">
+                
+                                <p>
+                                El modo avanzado permite crear usuarios de manera masiva.
+                                Cada nuevo usuario se representa en una linea de texto y se debe determinar los siguientes valores,
+                                separados por el caracter <strong>;</strong>
+                                </p>
+                                 <ul>
+                                    <li type="disc"> <strong>Nombre</strong> </li>
+                                    <li type="disc"> <strong>Contraseña</strong> </li>
+                                    <li type="disc"> <strong>Role[ROLE_ADMIN,ROLE_TEACHER ó ROLE_USER]</strong>*El poder crear un tipo u otro de usuario se determina según tu propio rol</li> 
+                                    <li type="disc"> <strong>Clases(opcionales)</strong> *Las clases se representa mediante identificadores por lo que debe existir previamente</li> 
+                                 </ul>
+                                <p>
+                                    Un ejemplo seria el siguiente (Existiendo previamente las clases 1 y 2):
+                                    <br>
+                                    <strong>amy_winehouse;qwerty;ROLE_USER;1,2</strong><br>
+                                    <strong>kurt_cobain;qwerty;ROLE_USER</strong><br>
+                                    <strong>bob_marley;qwerty;ROLE_USER;1</strong><br>
+                                </p>
+
+                                
+                         
+
+                            </div>
+                            <mat-form-field class="row" style="margin: 20px;">
+                                <textarea [(ngModel)]="advanceUser" matInput rows="5" cols="40" placeholder="Añadir Usuarios"></textarea>
                             </mat-form-field>
                             <button mat-raised-button class="btn btn-info pull-center" 
                             (click)="CreateAdvanceUser()" >Crear</button>

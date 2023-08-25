@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div style="width: 60px;" class="col card-header card-header-info align-self-end"> 
-                        <a class="material-icons" style="color: white;" (click)="newClassRoom()">school</a>
+                    <div (click)="newClassRoom()" style="width: 60px;" class="col card-header card-header-info align-self-end"> 
+                        <a class="material-icons" style="color: white;cursor:context-menu;">school</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" *ngIf="true">
@@ -29,8 +29,10 @@
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
                                     *matCellDef="let classRoom">
-                                        <mat-slide-toggle  disabled="true" color="primary"
-                                        [checked]="classRoom.enabled"></mat-slide-toggle>  
+                                        <a *ngIf="classRoom.enabled" class="material-icons"
+                                        style="color: rgb(109, 150, 109);" matTooltip="Habilitado">visibility</a>
+                                        <a *ngIf="!classRoom.enabled" class="material-icons" 
+                                        style="color: rgb(165, 111, 111);" matTooltip="Deshabilitado">disabled_visible</a>
                                     </mat-cell>
                                 </ng-container>
 
@@ -66,4 +68,8 @@
         </div>
     </div>
   </div>
-  
+  <style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+  </style>

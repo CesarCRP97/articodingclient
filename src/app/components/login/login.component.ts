@@ -46,7 +46,13 @@ export class LoginComponent implements OnInit, OnDestroy {
             console.log('Token -> ', token);
             sessionStorage.setItem('token','Bearer ' + token );
             sessionStorage.setItem('username', this.formLogin.value.username)
-            this.router.navigate(['/users'])
+            sessionStorage.setItem('role',  response.body.role)
+            if(response.body.role == "ROLE_USER") {
+              alert("El usuario no tiene permisos para acceder a la web")
+            } else {
+              this.router.navigate(['/users'])
+            }
+ 
         } else {
 
         }

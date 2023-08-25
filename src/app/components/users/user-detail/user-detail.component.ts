@@ -95,38 +95,4 @@ export class UserDetailComponent implements OnInit {
       window.location.reload();
     });
   }
-
-  toDisable(idLevel: number) {
-    if(confirm('¿Está seguro de deshabilitar el nivel '+ idLevel + '?')) {
-      this.subRefs$.push(
-      this.serverService.putLevel(idLevel, { active : false}).subscribe(
-        res => {
-          if (res.status === 200) {
-                this.getUser();
-          } else {
-            alert('Algo ha pasado... ' + res.status);
-          }
-        }, err => alert(err.error.message)
-
-      ));
-    } 
-  }
-  
-  toEnable(idLevel: number) {
-    if(confirm('¿Está seguro de habilitar el nivel '+ idLevel + '?')) {
-      this.subRefs$.push(
-        this.serverService.putLevel(idLevel, { active : true}).subscribe(
-        res => {
-          if (res.status === 200) {
-                this.getUser();
-          } else {
-            alert('Algo ha pasado... ' + res.status);
-          }
-        }, err => alert(err.error.message)
-
-      ));
-    
-    }   
-  }
-
 }

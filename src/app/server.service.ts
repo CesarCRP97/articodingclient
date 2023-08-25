@@ -109,7 +109,7 @@ export class ServerService {
   }
 
   /** CLASES -> PROFESORES */
-  addTeachersToClass(classRoomId: number, json: object[]):Observable<HttpResponse<ILink>> {
+  addTeachersToClass(classRoomId: number, json: string[]):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/teachers';
     return this.http.post<ILink>(url, json, { observe: 'response' });
   }
@@ -118,7 +118,7 @@ export class ServerService {
     return this.http.delete<ILink>(url, { observe: 'response' });
   }
   /** CLASES -> ESTUDIANTES */
-  addStudentsToClass(classRoomId: number, json: object[]):Observable<HttpResponse<ILink>> {
+  addStudentsToClass(classRoomId: number, json: string[]):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/students';
     return this.http.post<ILink>(url, json, { observe: 'response' });
   }

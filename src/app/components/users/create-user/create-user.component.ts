@@ -16,6 +16,9 @@ export class CreateUserComponent implements OnInit {
 
   advanceUser: string = '' ;
   simple:boolean = true;
+  isAdmin:boolean = false;
+  isTeacher:boolean = false;
+
 
   constructor( private formBuilder: FormBuilder,
     private serverService: ServerService,
@@ -31,6 +34,9 @@ export class CreateUserComponent implements OnInit {
       password: [this.user.password, Validators.required],
       role: [this.user.role, Validators.required]
     });
+    const role = sessionStorage.getItem("role");
+    this.isAdmin = role === "ROLE_ADMIN";
+    this.isTeacher = role === "ROLE_TEACHER";
   }
 
   CreateSimpleUser() {

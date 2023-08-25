@@ -28,7 +28,7 @@
                                 [(ngModel)]="user.password" formControlName="password"
                                 placeholder="Nueva Contraseña">
                             </mat-form-field>  
-                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid">Editar</button>
+                            <button mat-raised-button class="btn btn-info pull-center" type="submit" [disabled]="!formUser.valid">Guardar</button>
                             <div class="clearfix"></div>
                             </form>
                 
@@ -36,7 +36,8 @@
                             <div class="col-12">
                                 <mat-divider></mat-divider>
                                     <h3>Niveles creadoss</h3>
-                                    <mat-table [dataSource]="user.createdLevels"  #createdLevels="matTable" createdLevels>
+                                    <div *ngIf="user.createdLevels.length == 0">El usuario no ha creado ningun nivel</div>
+                                    <mat-table *ngIf="user.createdLevels.length > 0" [dataSource]="user.createdLevels"  #createdLevels="matTable" createdLevels>
                                         <ng-container matColumnDef="id">
                                             <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                             <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
@@ -53,23 +54,21 @@
                                             <mat-header-cell *matHeaderCellDef>Visibilidad</mat-header-cell>
                                             <mat-cell *matCellDef="let level">
                                                 <a *ngIf="level.active" class="material-icons"
-                                                style="color: green;" matTooltip="Deshabilitar nivel"
-                                                    (click)="toDisable(level.id)">visibility</a>
+                                                style="color: rgb(109, 150, 109);" matTooltip="Habilitado">visibility</a>
                                                 <a *ngIf="!level.active" class="material-icons" 
-                                                style="color: red;" matTooltip="Habilitar nivel"
-                                                    (click)="toEnable(level.id)">disabled_visible</a>
-                                                <a  class="material-icons"
-                                                style="color: #2196f3"  matTooltip="Ver detalle de nivel"
-                                                    (click)="goLevel(level.id)">search</a>
+                                                style="color: rgb(165, 111, 111);" matTooltip="Deshabilitado">disabled_visible</a>
                                             </mat-cell>
                                         </ng-container>
                                         <mat-header-row *matHeaderRowDef="displayedCreatedLevels"></mat-header-row>
-                                        <mat-row  *matRowDef="let row; columns: displayedCreatedLevels"></mat-row>
+                                        <mat-row matTooltip="Ver detalle de nivel"
+                                        (click)="goLevel(row.id)" *matRowDef="let row; columns: displayedCreatedLevels"></mat-row>
                                     </mat-table>
 
                                 <mat-divider></mat-divider>
-                                    <h3>Clases tutorizadas</h3>
-                                    <mat-table [dataSource]="user.ownerClassRooms" #ownerClass="matTable" ownerClass>
+                                    <h3 *ngIf="user.role && user.role.name != 'ROLE_USER'">Clases tutorizadas</h3>
+                                    <div *ngIf="user.role && user.role.name != 'ROLE_USER' && user.ownerClassRooms.length == 0">El usuario no es profesor de ninguna clase</div>
+                                    <mat-table *ngIf="user.role && user.role.name != 'ROLE_USER' && user.ownerClassRooms.length> 0" 
+                                        [dataSource]="user.ownerClassRooms" #ownerClass="matTable" ownerClass>
                                             <ng-container matColumnDef="id">
                                                 <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                                 <mat-cell *matCellDef="let class">{{class.id}}</mat-cell>
@@ -83,8 +82,10 @@
                                     </mat-table>
    
                                 <mat-divider></mat-divider>
-                                    <h3>Clases matriculadas</h3>
-                                    <mat-table [dataSource]="user.classRooms" #classRoom="matTable" classRoom>
+                                    <h3  *ngIf="user.role && user.role.name == 'ROLE_USER'">Clases matriculadas</h3>
+                                    <div *ngIf="user.role && user.role.name == 'ROLE_USER' && user.classRooms.length == 0">El usuario no es alumno de ninguna clase</div>
+                                    <mat-table *ngIf="user.role && user.role.name == 'ROLE_USER' && user.classRooms.length > 0"
+                                     [dataSource]="user.classRooms" #classRoom="matTable" classRoom>
                                             <ng-container matColumnDef="id">
                                                 <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                                 <mat-cell *matCellDef="let class">{{class.id}}</mat-cell>
@@ -105,4 +106,8 @@
         </div>
     </div>
 </div>
-  
+<style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+</style>

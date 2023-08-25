@@ -34,7 +34,7 @@
                                     </mat-form-field>  
                                     <button mat-raised-button class="btn btn-info pull-center" type="submit" 
                                     [disabled]="!(formClassRoom.valid && formClassRoom.dirty)">
-                                    {{isNew ? 'Guardar' : 'Editar'}}</button>
+                                    {{'Guardar'}}</button>
                                 </div>
                             <div class="clearfix"></div>
                             </form>
@@ -45,7 +45,7 @@
                                     <h3>Niveles</h3>
                                     <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
                                         <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos niveles</mat-label>
+                                            <mat-label>Añadir nuevos niveles por identificador</mat-label>
                                             <input matInput type="string" 
                                             [(ngModel)]="newLevels" formControlName="newLevels" 
                                             placeholder="1,6,15">
@@ -75,22 +75,23 @@
                                             <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                                             <mat-cell *matCellDef="let level">
                                                 <a class="material-icons"
-                                                style="color: rgba(252, 59, 59, 0.635)"  matTooltip="Borrar nivel de la clase"
-                                                    (click)="deleteLevel(level.id)">delete</a>
-                                                <a class="material-icons"
-                                                    style="color: #2196f3"  matTooltip="Ver detalle de nivel"
-                                                        (click)="goLevel(level.id)">search</a>
+                                                style="cursor:context-menu;z-index:1000;color: rgba(252, 59, 59, 0.635)"  
+                                                    (click)="deleteLevel($event, level.id)">delete</a>
                                             </mat-cell>
                                         </ng-container>
                                         <mat-header-row *matHeaderRowDef="displayedLevels"></mat-header-row>
-                                        <mat-row  *matRowDef="let row; columns: displayedLevels"></mat-row>
+                                        <mat-row  *matRowDef="let row; columns: displayedLevels"  
+                                        matTooltip="Ver detalle de nivel"
+                                        matTooltipPositionAtOrigin="true"
+                                        hideDelay="1000"
+                                        (click)="goLevel(row.id)"></mat-row>
                                     </mat-table>
 
                                 <mat-divider></mat-divider>
                                     <h3>Profesores</h3>
                                     <form class="row" style="width: 100%;" [formGroup]="formTeachers" (ngSubmit)="addTeachers()">
                                         <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos profesores</mat-label>
+                                            <mat-label>Añadir nuevos profesores por nombre</mat-label>
                                             <input matInput type="string" 
                                             [(ngModel)]="newTeachers" formControlName="newTeachers" 
                                             placeholder="1,6,15">
@@ -115,22 +116,20 @@
                                                 <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                                                 <mat-cell *matCellDef="let teacher">
                                                     <a class="material-icons"
-                                                    style="color: rgba(252, 59, 59, 0.635)"  matTooltip="Borrar profesor de la clase"
-                                                        (click)="deleteTeacher(teacher.id)">delete</a>
-                                                    <a class="material-icons"
-                                                        style="color: #2196f3"  matTooltip="Ver detalle de nivel"
-                                                            (click)="goUser(teacher.id)">search</a>     
+                                                    style="cursor:context-menu;color: rgba(252, 59, 59, 0.635)"
+                                                        (click)="deleteTeacher($event, teacher.id)">delete</a>
                                                 </mat-cell>
                                             </ng-container>
                                             <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
-                                            <mat-row *matRowDef="let row; columns: displayedUser"></mat-row>
+                                            <mat-row *matRowDef="let row; columns: displayedUser" matTooltip="Ver detalle de nivel"
+                                             (click)="goUser(row.id)"></mat-row>
                                     </mat-table>
    
                                 <mat-divider></mat-divider>
                                     <h3>Alumnos</h3>
                                     <form class="row" style="width: 100%;" [formGroup]="formStudents" (ngSubmit)="addStudents()">
                                         <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos usuarios</mat-label>
+                                            <mat-label>Añadir nuevos usuarios por nombre</mat-label>
                                             <input matInput type="string" 
                                             [(ngModel)]="newStudents" formControlName="newStudents" 
                                             placeholder="1,6,15">
@@ -155,15 +154,13 @@
                                                 <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                                                 <mat-cell *matCellDef="let student">
                                                     <a class="material-icons"
-                                                    style="color: rgba(252, 59, 59, 0.635)"  matTooltip="Borrar estudiante de la clase"
-                                                        (click)="deleteStudent(student.id)">delete</a>
-                                                    <a class="material-icons"
-                                                        style="color: #2196f3"  matTooltip="Ver detalle de nivel"
-                                                            (click)="goUser(student.id)">search</a>     
+                                                    style="cursor:context-menu;color: rgba(252, 59, 59, 0.635)"
+                                                        (click)="deleteStudent($event, student.id)">delete</a>
                                                 </mat-cell>
                                             </ng-container>
                                             <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
-                                            <mat-row *matRowDef="let row; columns: displayedUser"></mat-row>
+                                            <mat-row *matRowDef="let row; columns: displayedUser"
+                                             matTooltip="Ver detalle de nivel" (click)="goUser(row.id)"></mat-row>
                                     </mat-table>
 
                             </div>
@@ -174,4 +171,8 @@
         </div>
     </div>
 </div>
-  
+<style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+</style>

@@ -128,9 +128,10 @@ export class ClaseDetailComponent implements OnInit {
   addLevels() {
     var numbers: string[] = this.newLevels.trim().split(',');
     var valid = numbers.filter(n => !Number(n));
-    console.log("que apsa aqui");
     if (valid.length > 0) {
       this.formLevels.controls['newLevels'].setErrors({'incorrect': true});
+      alert("Debe indicar el identificador de la clase o clases, separado por comas.\n" +
+      "Por ejemplo: 1,2,3");
     } else {
       var ids: object[] = numbers.map(n => {return {id : n}});
       this.subRefs$.push(
@@ -147,26 +148,25 @@ export class ClaseDetailComponent implements OnInit {
     }
     
   }
-  deleteLevel(levelId: string) {
-    this.subRefs$.push(
-      this.serverService.deleteLevelsOfClass(this.classRoomId, levelId)
-      .subscribe(
-        res => {
-          if (res.status === 200) {
-            this.getClassRoom();
-          } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert(err.error.message)
-      )
-    );
+  deleteLevel(event: MouseEvent, levelId: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    if(confirm('¿Está seguro de eliminar el nivel '+ levelId + ' de la clase?')) {
+      this.subRefs$.push(
+        this.serverService.deleteLevelsOfClass(this.classRoomId, levelId)
+        .subscribe(
+          res => {
+            if (res.status === 200) {
+              this.getClassRoom();
+            } else alert('Algo ha pasado... ' + res.status);
+          }, err => alert(err.error.message)
+        )
+      );
+    }
   }
 
   addTeachers() {
-    var numbers: string[] = this.newTeachers.trim().split(',');
-    var valid = numbers.filter(n => !Number(n));
-    if (valid.length > 0) {
-      this.formTeachers.controls['newTeachers'].setErrors({'incorrect': true});
-    } else {
-      var ids: object[] = numbers.map(n => {return {id : n}});
+    var ids: string[] = this.newTeachers.trim().split(',');
       this.subRefs$.push(
         this.serverService.addTeachersToClass(this.classRoomId, ids)
         .subscribe(
@@ -178,29 +178,27 @@ export class ClaseDetailComponent implements OnInit {
           }, err => alert(err.error.message)
         )
       );
+  }
+
+  deleteTeacher(event: MouseEvent,teacherId: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    if(confirm('¿Está seguro de eliminar el profesor '+ teacherId + ' de la clase?')) {
+      this.subRefs$.push(
+        this.serverService.deleteTeacherOfClass(this.classRoomId, teacherId)
+        .subscribe(
+          res => {
+            if (res.status === 200) {
+              this.getClassRoom();
+            } else alert('Algo ha pasado... ' + res.status);
+          }, err => alert(err.error.message)
+        )
+      );
     }
   }
 
-  deleteTeacher(teacherId: string) {
-    this.subRefs$.push(
-      this.serverService.deleteTeacherOfClass(this.classRoomId, teacherId)
-      .subscribe(
-        res => {
-          if (res.status === 200) {
-            this.getClassRoom();
-          } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert(err.error.message)
-      )
-    );
-  }
-
   addStudents() {
-    var numbers: string[] = this.newStudents.trim().split(',');
-    var valid = numbers.filter(n => !Number(n));
-    if (valid.length > 0) {
-      this.formStudents.controls['newStudents'].setErrors({'incorrect': true});
-    } else {
-      var ids: object[] = numbers.map(n => {return {id : n}});
+    var ids: string[] = this.newStudents.trim().split(',');
       this.subRefs$.push(
         this.serverService.addStudentsToClass(this.classRoomId, ids)
         .subscribe(
@@ -212,20 +210,23 @@ export class ClaseDetailComponent implements OnInit {
           }, err => alert(err.error.message)
         )
       );
-    }
-    
   }
-  deleteStudent(studentId: string) {
-    this.subRefs$.push(
-      this.serverService.deleteStudentOfClass(this.classRoomId, studentId)
-      .subscribe(
-        res => {
-          if (res.status === 200) {
-            this.getClassRoom();
-          } else alert('Algo ha pasado... ' + res.status);
-        }, err => alert(err.error.message)
-      )
-    );
+  
+  deleteStudent(event: MouseEvent,studentId: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    if(confirm('¿Está seguro de eliminar el alumno '+ studentId + ' de la clase?')) {
+      this.subRefs$.push(
+        this.serverService.deleteStudentOfClass(this.classRoomId, studentId)
+        .subscribe(
+          res => {
+            if (res.status === 200) {
+              this.getClassRoom();
+            } else alert('Algo ha pasado... ' + res.status);
+          }, err => alert(err.error.message)
+        )
+      );
+    }
   }
 
   goLevel(levelId: string) {

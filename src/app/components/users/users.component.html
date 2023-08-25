@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div style="width: 60px;" class="col card-header card-header-info align-self-end"> 
-                        <a class="material-icons" style="color: white;" (click)="newUser()">person_add</a>
+                    <div (click)="newUser()" style="width: 60px;" class="col card-header card-header-info align-self-end"> 
+                        <a class="material-icons" style="color: white;cursor:context-menu;" >person_add</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" *ngIf="true">
@@ -23,8 +23,12 @@
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
                                               *matCellDef="let user">
-                                              <mat-slide-toggle  disabled="true" color="primary"
-                                              [checked]="user.enabled"></mat-slide-toggle>    
+                                        
+                                        <a *ngIf="user.enabled" class="material-icons"
+                                        style="color: rgb(109, 150, 109);" matTooltip="Habilitado">visibility</a>
+                                        <a *ngIf="!user.enabled" class="material-icons" 
+                                        style="color: rgb(165, 111, 111);" matTooltip="Deshabilitado">disabled_visible</a>
+                                              
                                     </mat-cell>
                                 </ng-container>
                               
@@ -35,7 +39,7 @@
                                 </ng-container>
                                 
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                <mat-row  (click)="goUser(row.id)" *matRowDef="let row; columns: displayedColumns"></mat-row>
+                                <mat-row class="myrow" (click)="goUser(row.id)" *matRowDef="let row; columns: displayedColumns"></mat-row>
                                 
                             </mat-table>
                             <mat-paginator #paginator  [length]="length"
@@ -49,4 +53,9 @@
         </div>
     </div>
   </div>
+  <style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+  </style>
   
