@@ -15,29 +15,28 @@ import { ServerService } from 'app/server.service';
 
 export class LoginComponent implements OnInit, OnDestroy {
 
-  formLogin: FormGroup;
+
   subRef$: Subscription;
   isError: boolean = false;
-  errorMensaje; string;
+  errorMensaje;
+  public username: string = '';
+  public password: string = '';
   hide = true;
   constructor(
     private formBuilder: FormBuilder,
     private serverService: ServerService,
     private router: Router
   ) { 
-    this.formLogin = formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
   }
 
   ngOnInit(): void {
+
   }
 
   Login() {
     const usuarioLogin: ILogin = {
-      username: this.formLogin.value.username,
-      password: this.formLogin.value.password,
+      username: this.username,
+      password: this.password,
     }
     this.subRef$ = this.serverService.login(usuarioLogin)
       .subscribe(response => {
@@ -45,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           const token = response.body.token;
             console.log('Token -> ', token);
             sessionStorage.setItem('token','Bearer ' + token );
-            sessionStorage.setItem('username', this.formLogin.value.username)
+            sessionStorage.setItem('username', this.username)
             sessionStorage.setItem('role',  response.body.role)
             if(response.body.role == "ROLE_USER") {
               alert("El usuario no tiene permisos para acceder a la web")
@@ -59,7 +58,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       }, err => {
         this.errorMensaje = err.error.message;
         this.isError = true;
-        this.formLogin.reset();
+        this.username = '';
+        this.password = '';
       });
   }
 

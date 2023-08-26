@@ -6,29 +6,26 @@
                 <div class="card">
                     <div class="card-header card-header-info"  style="text-align: center;">
                         <h4 class="card-title">Administración ArtiCoding</h4>
-
                     </div>
                     <div class="card-body">
-                        <form [formGroup]="formLogin" (ngSubmit)="Login()" style="text-align: center;">
+                        <div style="text-align: center;">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field class="example-full-width" style="text-align: center;">
-                                        <input matInput placeholder="Usuario" formControlName="username">
-                                    </mat-form-field>
+                                <div class="col-md-6" style="height: 100px;">
+                                    <label>Nombre de usuario</label><br>
+                                    <input matInput placeholder="Usuario" [(ngModel)]="username">
                                 </div>
-                                <div class="col-md-6 row">
-                                        <mat-form-field class="example-full-width" style="text-align: center;">
-                                            <input matInput placeholder="Contraseña" 
-                                            [type]="hide? 'password' : 'text'" 
-                                            formControlName="password">
-                                            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                                        </mat-form-field>
-                                        <div style="text-align: center;margin-top:15px;">
-                                            <div>
-                                                <a class="material-icons" (click)="hide = !hide" style="color: grey;">{{hide ? 'visibility_off' : 'visibility'}}</a>
-                                   
-                                            </div>
-                                        </div>
+                                <div class="col-md-6" style="height: 100px;">
+                                    <label>Contraseña</label><br>
+                                    <div class="row justify-content-center">
+                                        <input matInput placeholder="Contraseña" style="height: 30px;"
+                                        [type]="hide? 'password' : 'text'" 
+                                        [(ngModel)]="password">
+                                    
+                                        <a class="material-icons" (click)="hide = !hide" style="color: grey;height: 30px;margin-top: 3px;margin-left: 8px;">
+                                            {{hide ? 'visibility_off' : 'visibility'}}
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="row">
@@ -39,10 +36,10 @@
                                 </div>
                             </div>
                             <button mat-raised-button class="btn btn-info pull-center"
-                            type="submit" [disabled]="!formLogin.valid">
+                            (click)="Login()">
                                 Iniciar sesión</button>
                             <div class="clearfix"></div>
-                        </form>
+                        </div>
                     </div>
                 </div>   
             </div>   
