@@ -5,7 +5,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './components/login/login.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 
@@ -19,7 +18,7 @@ const routes: Routes =[
     runGuardsAndResolvers: 'always'
   },
   { path:'login', component: LoginComponent},
-  { path:'**', component: PageNotFoundComponent},
+  { path:'**', component: LoginComponent},
 
 
 ];
