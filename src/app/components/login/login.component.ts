@@ -30,7 +30,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    if(sessionStorage.getItem('token')) {
+      this.router.navigate(['/users'])
+    };
   }
 
   Login() {

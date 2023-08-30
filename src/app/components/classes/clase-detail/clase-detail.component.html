@@ -94,7 +94,7 @@
                                             <mat-label>Añadir nuevos profesores por nombre</mat-label>
                                             <input matInput type="string" 
                                             [(ngModel)]="newTeachers" formControlName="newTeachers" 
-                                            placeholder="1,6,15">
+                                            placeholder="amy_winehouse,kurt_cobain">
                                             <div *ngIf="newTeachers && !newTeachers.valid">{{newTeachers.errors| json}}</div>
                                         </mat-form-field>
                                         <button style="border: 0; background: transparent;">
@@ -132,7 +132,7 @@
                                             <mat-label>Añadir nuevos usuarios por nombre</mat-label>
                                             <input matInput type="string" 
                                             [(ngModel)]="newStudents" formControlName="newStudents" 
-                                            placeholder="1,6,15">
+                                            placeholder="bob_marley,amy_winehouse">
                                             <div *ngIf="newStudents && !newStudents.valid">{{newStudents.errors| json}}</div>
                                         </mat-form-field>
                                         <button style="border: 0; background: transparent;">

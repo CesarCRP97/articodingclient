@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div (click)="newClassRoom()" style="width: 60px;" class="col card-header card-header-info align-self-end"> 
-                        <a class="material-icons" style="color: white;cursor:context-menu;">school</a>
+                    <div (click)="newClassRoom()" style="width: 60px;cursor:pointer;" class="col card-header card-header-info align-self-end"> 
+                        <a class="material-icons" style="color: white;">school</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" *ngIf="true">
@@ -54,7 +54,7 @@
                                     *matCellDef="let classRoom">{{classRoom.levels}}</mat-cell>
                                 </ng-container>                           
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                <mat-row (click)="goClase(row.id)" *matRowDef="let row; columns: displayedColumns"></mat-row>
+                                <mat-row (click)="goClase(row.id)" style="cursor:pointer;" *matRowDef="let row; columns: displayedColumns"></mat-row>
                                 
                             </mat-table>
                             <mat-paginator #paginator  [length]="length"
