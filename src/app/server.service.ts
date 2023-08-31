@@ -12,18 +12,19 @@ import { ILevel } from './models/Ilevel';
 import { IUserDetail } from './models/IUserDetail';
 import { LevelDetail } from './models/LevelDetail';
 import { ClassRoomDetail } from './models/ClassRoomDetail';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerService {
 
-  //host:string = "http://13.48.149.249:8080/";
-  host:string = "http://localhost:8080/";
+  host:string;
   authorized: boolean = false;
 
 
   constructor(private http: HttpClient) { 
+    this.host = environment.host;
   }
 
   login(user: ILogin): Observable<HttpResponse<IResponse>> {
