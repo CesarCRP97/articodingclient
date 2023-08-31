@@ -12,7 +12,7 @@ El proyecto esta sobre Angular CLI, para su despliegue:
 
 1. Instalar NodeJs [NodeJs Official Page](https://nodejs.org/en).
 
-2. Abrir terminal y haceder a la raiz del proyecto
+2. Abrir terminal y acceder a la raiz del proyecto
 
 4. Make sure you have installed [Angular CLI](https://github.com/angular/angular-cli) already. If not, please install.
 5. Modificar el campo host del fichero environments.ts para configurar la url del ArticodingServer
