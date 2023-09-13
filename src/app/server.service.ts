@@ -34,8 +34,9 @@ export class ServerService {
 
   /** USERS */
 
-  getUsers(page:number, size:number, classId: number, teacher: boolean):Observable<HttpResponse<IPage<IUser>>> {
-    var url = this.host + 'users?page=' + page + '&size=' + size;
+  getUsers(page:number, size:number, classId: number, teacher: boolean, filter:string = null):Observable<HttpResponse<IPage<IUser>>> {
+    var url = this.host + 'users?page=' + page + '&size=' + size + 
+    (filter?"&title=" + filter:"");
     if (classId) {
       url = url + '&class=' + classId + '&teacher=' + teacher;
     }
@@ -68,8 +69,9 @@ export class ServerService {
 
   /** CLASS ROOMS */
 
-  getClassRooms(page: number, size: number,levelId: number, userId: number, teacherId: number):Observable<HttpResponse<IPage<IClassRoom>>> {
-    var url = this.host + 'classes?page=' + page + '&size=' + size;
+  getClassRooms(page: number, size: number,levelId: number, userId: number, teacherId: number,filter:string = null):Observable<HttpResponse<IPage<IClassRoom>>> {
+    var url = this.host + 'classes?page=' + page + '&size=' + size + 
+    (filter?"&title=" + filter:"");
     if(levelId) {
       url = url + '&level=' + levelId;
     } else if(userId){
@@ -129,14 +131,16 @@ export class ServerService {
   }
   /** LEVELS */
 
-  getLevels(page: number, size: number,classId: number, userId: number):Observable<HttpResponse<IPage<ILevel>>> {
-    var url = this.host + 'levels?page=' + page + '&size=' + size;
+  getLevels(page: number, size: number,classId: number, userId: number, filter:string = null):Observable<HttpResponse<IPage<ILevel>>> {
+   debugger 
+   var url = this.host + 'levels?page=' + page + '&size=' + size + 
+    (filter?"&title=" + filter:"");
+
     if(classId) {
       url = url + '&class=' + classId;
     } else if(userId){
       url = url + '&user=' + userId;
     }
-
     return this.http.get<IPage<ILevel>>(url, 
       { observe: 'response' });
   }

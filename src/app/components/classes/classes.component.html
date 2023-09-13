@@ -7,6 +7,28 @@
                         <a class="material-icons" style="color: white;">school</a>
                     </div>
                     <div class="card-body">
+                        <div class="row justify-content-start" style="padding-left: 20px;" width="95%">
+                            <div *ngIf="!isFilter" class="row">
+                                <mat-form-field width="200px" style="padding-left: 20px;">
+                                    <input matInput type="string" 
+                                     [(ngModel)]="filter"
+                                     placeholder="Filtrar por nombre"
+                                     (keyup.enter)="putFilter()">
+                                 </mat-form-field>
+                                 <button (click)="putFilter()" 
+                                 style="border: 0; background: transparent;">
+                                     <a class="material-icons" style="color: #00bcd4;">filter_alt</a>
+                                 </button> 
+                            </div>
+                            <div *ngIf="isFilter" style="padding-right: 10px;">
+                                    <mat-chip-list #chipList>
+                                      <mat-chip>
+                                        Nombre  '{{filter}}'  
+                                        <mat-icon class="tal" (click)="quitFilter()">cancel</mat-icon>
+                                      </mat-chip>
+                                    </mat-chip-list>
+                            </div>
+                        </div>
                         <div class="table-responsive" *ngIf="true">
                             <mat-table class="lessons-table mat-elevation-z8" [dataSource]="classRooms" #classRoomTable>
                                 <ng-container matColumnDef="id">
@@ -71,5 +93,13 @@
   <style>
     .mat-row:hover {
     background-color: #00bbd442;
+    }
+    .tal {
+        padding: 4px 4px 3px 4px;
+        font-size: 17px;
+        color: gray;
+    }
+    .tal:hover{
+        color: rgb(56, 53, 53)!important;
     }
   </style>

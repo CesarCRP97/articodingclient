@@ -36,6 +36,8 @@ export class LevelsComponent implements OnInit {
   displayedColumns: string[] = ['id','title', 'description','active','publicLevel', 'classRooms','owner'];
   classId: number = null;
   userId:number = null; 
+  filter = "";
+  isFilter = false;
   
   ngOnInit(): void {
       const p: PageEvent =new PageEvent();
@@ -54,8 +56,9 @@ export class LevelsComponent implements OnInit {
   }
 
   public getServerData(event?:PageEvent){
+    debugger
     this.subRefs$.push(
-      this.serverService.getLevels(event.pageIndex, event.pageSize, this.classId, this.userId)
+      this.serverService.getLevels(event.pageIndex, event.pageSize, this.classId, this.userId, this.filter != ''? this.filter : null)
       .subscribe(
         res => {
           if (res.status === 200) {
@@ -101,6 +104,24 @@ export class LevelsComponent implements OnInit {
     });
   }
 
+  putFilter() {
+    this.isFilter = true;
+    this.pageIndex = 0;
+    const p: PageEvent =new PageEvent();
+    p.pageIndex = 0;
+    p.pageSize = this.pageSize;
+    this.getServerData(p);
+  }
+
+  quitFilter() {
+    this.isFilter = false;
+    this.filter = '';
+    this.pageIndex = 0;
+    const p: PageEvent =new PageEvent();
+    p.pageIndex = 0;
+    p.pageSize = this.pageSize;
+    this.getServerData(p);
+  }
   ngOnDestroy(): void {
     this.subRefs$.forEach(r => {if(r){ r.unsubscribe();} })
    }

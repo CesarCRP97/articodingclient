@@ -28,6 +28,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 import { UserDetailComponent } from 'app/components/users/user-detail/user-detail.component';
 import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
 import { ConfirmDialogComponent } from 'app/components/confirm-dialog/confirm-dialog.component';
@@ -63,7 +64,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    MatChipsModule
   ],
   declarations: [
     UsersComponent,

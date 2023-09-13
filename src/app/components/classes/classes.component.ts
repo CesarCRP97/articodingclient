@@ -36,7 +36,8 @@ export class ClassesComponent implements OnInit {
   levelId: number = null;
   userId:number = null; 
   teacherId:number = null;
-
+  filter = "";
+  isFilter = false;
   ngOnInit(): void {
     const p: PageEvent =new PageEvent();
     p.pageIndex = 0;
@@ -59,7 +60,7 @@ export class ClassesComponent implements OnInit {
 
   public getServerData(event?:PageEvent){
     this.subRefs$.push(
-      this.serverService.getClassRooms(event.pageIndex, event.pageSize, this.levelId, this.userId, this.teacherId)
+      this.serverService.getClassRooms(event.pageIndex, event.pageSize, this.levelId, this.userId, this.teacherId, this.filter != ''? this.filter : null)
       .subscribe(
         res => {
           if (res.status === 200) {
@@ -114,6 +115,25 @@ export class ClassesComponent implements OnInit {
     }); 
   }
 
+  
+  putFilter() {
+    this.isFilter = true;
+    this.pageIndex = 0;
+    const p: PageEvent =new PageEvent();
+    p.pageIndex = 0;
+    p.pageSize = this.pageSize;
+    this.getServerData(p);
+  }
+
+  quitFilter() {
+    this.isFilter = false;
+    this.filter = '';
+    this.pageIndex = 0;
+    const p: PageEvent =new PageEvent();
+    p.pageIndex = 0;
+    p.pageSize = this.pageSize;
+    this.getServerData(p);
+  }
 
   ngOnDestroy(): void {
     this.subRefs$.forEach(r => {if(r){ r.unsubscribe();} })

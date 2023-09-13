@@ -36,7 +36,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['id', 'username', 'enabled', 'role'];
   classId: number = null;
   teacher:boolean = null;
-
+  filter = "";
+  isFilter = false;
   
   ngOnInit(): void {
     const p: PageEvent =new PageEvent();
@@ -54,7 +55,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   public getServerData(event?:PageEvent){
     
     this.subRefs$.push(
-      this.serverService.getUsers(event.pageIndex, event.pageSize, this.classId, this.teacher)
+      this.serverService.getUsers(event.pageIndex, event.pageSize, this.classId, this.teacher, this.filter != ''? this.filter : null)
       .subscribe(
         res => {
         
@@ -90,6 +91,24 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  putFilter() {
+    this.isFilter = true;
+    this.pageIndex = 0;
+    const p: PageEvent =new PageEvent();
+    p.pageIndex = 0;
+    p.pageSize = this.pageSize;
+    this.getServerData(p);
+  }
+
+  quitFilter() {
+    this.isFilter = false;
+    this.filter = '';
+    this.pageIndex = 0;
+    const p: PageEvent =new PageEvent();
+    p.pageIndex = 0;
+    p.pageSize = this.pageSize;
+    this.getServerData(p);
+  }
   ngOnDestroy(): void {
    this.subRefs$.forEach(r => {if(r){ r.unsubscribe();} })
   }
