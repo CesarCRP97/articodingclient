@@ -18,7 +18,8 @@ El proyecto esta sobre Angular CLI, para su despliegue:
 
 5. Modificar el campo host del fichero environments.ts para configurar la url del ArticodingServer
 
-6. Instalar dependencias ```npm start```
+
+6. Instalar dependencias ("npm install") ->  ```npm start```
 
 7. Acceder al puerto, por defecto el 4200.  
  
@@ -26,5 +27,3 @@ El proyecto esta sobre Angular CLI, para su despliegue:
 ## Resources
 
 - ArticodingServer: <https://github.com/henarmd/articodingserver>
-
-- Demo AWS: <http://articodings3bucket.s3-website.eu-north-1.amazonaws.com/>
