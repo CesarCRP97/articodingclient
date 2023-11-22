@@ -39,4 +39,5 @@ NOTA: por defecto username: "root" y password "root01"
 
 ## Resources
 
-- ArticodingServer: <https://github.com/henarmd/articodingserver>
+- Articoding Game:  <https://github.com/OskarFreestyle/Articoding23-24>
+- ArticodingServer: <https://github.com/CesarCRP97/articodingserver>
