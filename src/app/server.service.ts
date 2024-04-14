@@ -8,7 +8,7 @@ import { IPage } from './models/IPage';
 import { IResponse } from './models/iresponse';
 import { IUser } from './models/IUser';
 import { User } from './models/User';
-import { ILevel } from './models/Ilevel';
+import { ILevelWithImage } from './models/ILevel';
 import { IUserDetail } from './models/IUserDetail';
 import { LevelDetail } from './models/LevelDetail';
 import { ClassRoomDetail } from './models/ClassRoomDetail';
@@ -131,7 +131,7 @@ export class ServerService {
   }
   /** LEVELS */
 
-  getLevels(page: number, size: number,classId: number, userId: number, filter:string = null):Observable<HttpResponse<IPage<ILevel>>> {
+  getLevels(page: number, size: number,classId: number, userId: number, filter:string = null):Observable<HttpResponse<IPage<ILevelWithImage>>> {
    debugger 
    var url = this.host + 'levels?page=' + page + '&size=' + size + 
     (filter?"&title=" + filter:"");
@@ -141,7 +141,7 @@ export class ServerService {
     } else if(userId){
       url = url + '&user=' + userId;
     }
-    return this.http.get<IPage<ILevel>>(url, 
+    return this.http.get<IPage<ILevelWithImage>>(url, 
       { observe: 'response' });
   }
 

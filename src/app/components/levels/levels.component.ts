@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { ILevel } from 'app/models/Ilevel';
+import { ILevelWithImage } from 'app/models/ILevel';
 import { IPage } from 'app/models/IPage';
 import { ServerService } from 'app/server.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,9 +31,9 @@ export class LevelsComponent implements OnInit {
   pageIndex:number;
   pageSize:number;
   length:number;
-  levels: ILevel[];
+  levels: ILevelWithImage[];
   loadTable:boolean = false;
-  displayedColumns: string[] = ['id','title', 'description','active','publicLevel', 'classRooms','owner'];
+  displayedColumns: string[] = ['id','title', 'description','active','publicLevel', 'classRooms','owner','likes', 'timesPlayed'];
   classId: number = null;
   userId:number = null; 
   filter = "";
@@ -62,7 +62,8 @@ export class LevelsComponent implements OnInit {
       .subscribe(
         res => {
           if (res.status === 200) {
-            let response: IPage<ILevel> = res.body;
+            const response: IPage<ILevelWithImage> = res.body;
+            //alert(JSON.stringify());
             this.levels = response.content;
             this.loadTable = true;
             this.pageIndex = response.pageable.pageNumber;

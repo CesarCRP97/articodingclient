@@ -30,27 +30,27 @@
                             <mat-table class="lessons-table mat-elevation-z8" [dataSource]="levels" #levelTable>
                                 <ng-container matColumnDef="id">
                                     <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
-                                    <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                    <mat-cell *matCellDef="let level">{{level.level.id}}</mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="title">
                                     <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-                                    <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                    <mat-cell *matCellDef="let level">{{level.level.title}}</mat-cell>
                                 </ng-container>
                               
                                 <ng-container matColumnDef="description">
                                     <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
                                     <mat-cell  class="description-cell"
-                                              *matCellDef="let level">{{level.description}}</mat-cell>
+                                              *matCellDef="let level">{{level.level.description}}</mat-cell>
                                 </ng-container>
                               
                                 <ng-container matColumnDef="publicLevel">
                                     <mat-header-cell *matHeaderCellDef>Público</mat-header-cell>
                                     <mat-cell  class="description-cell"
                                     *matCellDef="let level">
-                                    <a *ngIf="level.publicLevel" class="material-icons"
+                                    <a *ngIf="level.level.publicLevel" class="material-icons"
                                     style="color: rgb(109, 150, 109);" matTooltip="Público">lock_open</a>
-                                    <a *ngIf="!level.publicLevel" class="material-icons" 
+                                    <a *ngIf="!level.level.publicLevel" class="material-icons" 
                                     style="color: rgb(165, 111, 111);" matTooltip="Privado">lock</a>
 
                                     </mat-cell>
@@ -59,22 +59,32 @@
                                 <ng-container matColumnDef="classRooms">
                                     <mat-header-cell *matHeaderCellDef>NºClases</mat-header-cell>
                                     <mat-cell  class="description-cell" (click)="goClassRoom(level.id)"
-                                    *matCellDef="let level">{{level.classRooms}}</mat-cell>
+                                    *matCellDef="let level">{{level.level.classRooms}}</mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="owner">
                                     <mat-header-cell *matHeaderCellDef>Creador</mat-header-cell>
                                     <mat-cell  class="description-cell" (click)="goUser(level.owner.id)"
-                                    *matCellDef="let level">{{level.owner.username}}</mat-cell>
+                                    *matCellDef="let level">{{level.level.owner.username}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="likes">
+                                    <mat-header-cell *matHeaderCellDef>Likes</mat-header-cell>
+                                    <mat-cell *matCellDef="let level">{{level.level.likes}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="timesPlayed">
+                                    <mat-header-cell *matHeaderCellDef>Veces jugado</mat-header-cell>
+                                    <mat-cell *matCellDef="let level">{{level.level.timesPlayed}}</mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="active">
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
                                     <mat-cell  class="description-cell"
                                     *matCellDef="let level">
-                                        <a *ngIf="level.active" class="material-icons"
+                                        <a *ngIf="level.level.active" class="material-icons"
                                         style="color: rgb(109, 150, 109);" matTooltip="Habilitado">visibility</a>
-                                        <a *ngIf="!level.active" class="material-icons" 
+                                        <a *ngIf="!level.level.active" class="material-icons" 
                                         style="color: rgb(165, 111, 111);" matTooltip="Deshabilitado">disabled_visible</a>
                                     </mat-cell>
                                 </ng-container>

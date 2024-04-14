@@ -8,6 +8,8 @@ export class LevelDetail {
     active: boolean;
     classRooms: number;
     owner: IUser;
+    likes: number;
+    timesPlayed: number;
 
     constructor() {
         this.title = '';
@@ -16,5 +18,7 @@ export class LevelDetail {
         this.active = false;
         this.owner = null;
         this.classRooms = null;
+        this.likes = 0;
+        this.timesPlayed = 0;
     }
 }

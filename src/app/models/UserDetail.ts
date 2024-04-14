@@ -1,7 +1,7 @@
 import { IClassRoom } from "./IClassRoom";
 import { IRole } from "./IRole";
 import { IUserDetail } from "./IUserDetail";
-import { ILevel } from "./Ilevel";
+import { ILevel } from "./ILevel";
 
 export class UserDetail implements IUserDetail {
     id: number;
@@ -12,6 +12,7 @@ export class UserDetail implements IUserDetail {
     classRooms: IClassRoom[];
     ownerClassRooms: IClassRoom[];
     password: string;
+    likedLevels: ILevel[];
     constructor() {
         this.username = '';
         this.enabled = true;
