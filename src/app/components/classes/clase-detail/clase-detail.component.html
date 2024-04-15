@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-md-12" *ngIf="classRoom">
                 <div class="card">
-                    <div class="col card-header card-header-info align-self-end"> 
-                        {{(classRoom ? classRoom.name: '') | uppercase}}
+                    <div class="col card-header card-header-info align-self-end" style="font-weight: bold;"> 
+                        {{(classRoom ? "Clave : " + classRoom.key: '') | uppercase}}
                     </div>
                     <div class="card-body">
     
@@ -22,8 +22,7 @@
                                         <input matInput matInput type="string" 
                                         [(ngModel)]="classRoom.name" formControlName="name" 
                                         placeholder="Nombre">
-                                    </mat-form-field>  
-
+                                    </mat-form-field>   
                                 </div>
                                 <div class="row">
                                     <mat-form-field class="col-9">

@@ -32,7 +32,7 @@ export class ClassesComponent implements OnInit {
   length:number;
   classRooms: IClassRoom[];
   loadTable:boolean = false;
-  displayedColumns: string[] = ['id','name', 'description','enabled','levels', 'teachers','students'];
+  displayedColumns: string[] = ['id','name','key', 'description','enabled','levels', 'teachers','students'];
   levelId: number = null;
   userId:number = null; 
   teacherId:number = null;

@@ -46,6 +46,11 @@
                                     <mat-cell  class="description-cell"
                                               *matCellDef="let classRoom">{{classRoom.description}}</mat-cell>
                                 </ng-container>
+                                
+                                <ng-container matColumnDef="key">
+                                    <mat-header-cell *matHeaderCellDef>Clave</mat-header-cell>
+                                    <mat-cell *matCellDef="let classRoom">{{classRoom.key}}</mat-cell>
+                                </ng-container>
                               
                                 <ng-container matColumnDef="enabled">
                                     <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
