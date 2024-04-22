@@ -1,0 +1,100 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12" *ngIf="playlist">
+                <div class="card">
+                    <div class="col card-header card-header-info align-self-end" style="font-weight: bold;"> 
+                        {{(playlist ? "Playlist : " + playlist.title: '') | uppercase}}
+                    </div>
+                    <div class="card-body">
+                        <!--
+                            <form style="width: 100%;" [formGroup]="formClassRoom" (ngSubmit)="editClassRoom()">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <mat-slide-toggle color="primary"  
+                                        [checked]="classRoom.enabled" 
+                                        (change)="classRoom.enabled = !classRoom.enabled"
+                                        formControlName="enabled">
+                                         Activado</mat-slide-toggle>    
+                                    </div>
+                                    <mat-form-field class="col-6">
+                                        <mat-label>Nombre</mat-label>
+                                        <input matInput matInput type="string" 
+                                        [(ngModel)]="classRoom.name" formControlName="name" 
+                                        placeholder="Nombre">
+                                    </mat-form-field>   
+                                </div>
+                                <div class="row">
+                                    <mat-form-field class="col-9">
+                                        <mat-label>Descripción</mat-label>
+                                        <input matInput matInput type="string" 
+                                        [(ngModel)]="classRoom.description" formControlName="description" 
+                                        placeholder="Descripción">
+                                    </mat-form-field>  
+                                    <button mat-raised-button class="btn btn-info pull-center" type="submit" 
+                                    [disabled]="!(formClassRoom.valid && formClassRoom.dirty)">
+                                    {{'Guardar'}}</button>
+                                </div>
+                            <div class="clearfix"></div>
+                            </form>
+                        -->
+                        <div class="row" *ngIf="!isNew">
+                            <div class="col-12">
+                                <mat-divider></mat-divider>
+                                    <h3>Niveles</h3>
+                                    <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
+                                        <mat-form-field class="col-6">
+                                            <mat-label>Añadir nuevos niveles por identificador</mat-label>
+                                            <input matInput type="string" 
+                                            [(ngModel)]="newLevels" formControlName="newLevels" 
+                                            placeholder="1,6,15">
+                                            <div *ngIf="newLevels && !newLevels.valid">{{newLevels.errors| json}}</div>
+                                        </mat-form-field>
+                                        <button style="border: 0; background: transparent;">
+                                            <a [disabled]="!(formLevels.valid && formLevels.dirty)" 
+                                            type="submit"
+                                            class="material-icons" style="color: #00bcd4;">add</a>
+                                        </button> 
+                                
+                                    </form>
+                                    <mat-table [dataSource]="playlist.levels"  #levels="matTable" levels>
+                                        <ng-container matColumnDef="id">''
+                                            <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="title">
+                                            <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="active">
+                                            <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">{{level.active}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="actions">
+                                            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                            <mat-cell *matCellDef="let level">
+                                                <a class="material-icons"
+                                                style="cursor:context-menu;z-index:1000;color: rgba(252, 59, 59, 0.635)"  
+                                                    (click)="deleteLevel($event, level.id)">delete</a>
+                                            </mat-cell>
+                                        </ng-container>
+                                        <mat-header-row *matHeaderRowDef="displayedLevels"></mat-header-row>
+                                        <mat-row  *matRowDef="let row; columns: displayedLevels"  
+                                        matTooltip="Ver detalle de nivel"
+                                        matTooltipPositionAtOrigin="true"
+                                        hideDelay="1000"
+                                        (click)="goLevel(row.id)"></mat-row>
+                                    </mat-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .mat-row:hover {
+    background-color: #00bbd442;
+    }
+</style>
