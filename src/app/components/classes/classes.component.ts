@@ -60,8 +60,11 @@ export class ClassesComponent implements OnInit {
 
   public getServerData(event?:PageEvent){
     this.subRefs$.push(
-      this.serverService.getClassRooms(event.pageIndex, event.pageSize, this.levelId, this.userId, this.teacherId, this.filter != ''? this.filter : null)
-      .subscribe(
+      this.serverService.getClassRooms(
+        event.pageIndex, event.pageSize,
+        this.levelId, this.userId, this.teacherId, 
+        this.filter != ''? this.filter : null
+      ).subscribe(
         res => {
           if (res.status === 200) {
             let response: IPage<IClassRoom> = res.body;
@@ -94,8 +97,8 @@ export class ClassesComponent implements OnInit {
     });
   }
 
-  goLevels(levelId: number) {
-    const currentUrl = '/#/levels?classId=' + levelId;
+  goLevels(classId: number) {
+    const currentUrl = '/#/levels?classId=' + classId;
     this.router.navigateByUrl(currentUrl).then(() => {
       window.location.reload();
     });
