@@ -36,6 +36,8 @@ import { LevelDetailComponent } from 'app/components/levels/level-detail/level-d
 import { ClaseDetailComponent } from 'app/components/classes/clase-detail/clase-detail.component';
 import { LoadingService } from 'app/LoadingService';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PlaylistsComponent } from 'app/components/playlists/playlists.component';
+import { PlaylistDetailComponent } from 'app/components/playlists/playlist-detail/playlist-detail.component';
 
 @NgModule({
   imports: [
@@ -74,8 +76,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LevelsComponent,
     LevelDetailComponent,
     ClassesComponent,
-    ClaseDetailComponent
-    
+    ClaseDetailComponent,
+    PlaylistsComponent,
+    PlaylistDetailComponent
   ],
   providers: [    
     ServerService,
