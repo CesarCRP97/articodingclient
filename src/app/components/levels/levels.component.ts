@@ -33,7 +33,7 @@ export class LevelsComponent implements OnInit {
   length:number;
   levels: ILevelWithImage[];
   loadTable:boolean = false;
-  displayedColumns: string[] = ['id','title', 'description','active','publicLevel', 'classRooms','owner','likes', 'timesPlayed'];
+  displayedColumns: string[] = ['id','title', 'description','active','publicLevel', 'classRooms','owner', 'likes', 'timesPlayed'];
   classId: number = null;
   userId:number = null; 
   filter = "";
