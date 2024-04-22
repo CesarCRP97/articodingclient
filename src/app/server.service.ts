@@ -13,6 +13,7 @@ import { IUserDetail } from './models/IUserDetail';
 import { LevelDetail } from './models/LevelDetail';
 import { ClassRoomDetail } from './models/ClassRoomDetail';
 import { environment } from '../environments/environment';
+import { IPlaylist } from './models/IPlaylist';
 
 @Injectable({
   providedIn: 'root'
@@ -27,14 +28,19 @@ export class ServerService {
     this.host = environment.host;
   }
 
-  login(user: ILogin): Observable<HttpResponse<IResponse>> {
+  public login(user: ILogin): Observable<HttpResponse<IResponse>> {
     return this.http.post<IResponse>(this.host + 'login', 
     user, { observe: 'response'});
   }
 
   /** USERS */
 
-  getUsers(page:number, size:number, classId: number, teacher: boolean, filter:string = null):Observable<HttpResponse<IPage<IUser>>> {
+  public getUsers(
+    page:number, size:number,
+    classId?: number,
+    teacher?: boolean,
+    filter:string = null
+  ):Observable<HttpResponse<IPage<IUser>>> {
     var url = this.host + 'users?page=' + page + '&size=' + size + 
     (filter?"&title=" + filter:"");
     if (classId) {
@@ -44,32 +50,38 @@ export class ServerService {
       { observe: 'response' });
   }
 
-  getUser(userId: number):Observable<HttpResponse<IUserDetail>> {
+  public getUser(userId: number):Observable<HttpResponse<IUserDetail>> {
     var url = this.host + 'users/' + userId;
     return this.http.get<IUserDetail>(url, 
       { observe: 'response' });
   }
 
-  createUser(user: User):Observable<HttpResponse<ILink>> {
+  public createUser(user: User):Observable<HttpResponse<ILink>> {
     const url = this.host + 'users';
     return this.http.post<ILink>(url, user,
       { observe: 'response' });
   }
 
-  createUsers(users: User[]) {
+  public createUsers(users: User[]) {
     const url = this.host + 'users/list';
     return this.http.post<ILink>(url, users,
       { observe: 'response' });
   }
 
-  putUser(id:number, json:object):Observable<HttpResponse<ILink>> {
+  public putUser(id:number, json:object):Observable<HttpResponse<ILink>> {
     const url = this.host + 'users/' + id;
     return this.http.put<ILink>(url, json, { observe: 'response' });
   }
 
   /** CLASS ROOMS */
 
-  getClassRooms(page: number, size: number,levelId: number, userId: number, teacherId: number,filter:string = null):Observable<HttpResponse<IPage<IClassRoom>>> {
+  public getClassRooms(
+    page: number, size: number,
+    levelId?: number,
+    userId?: number,
+    teacherId?: number,
+    filter:string = null
+  ):Observable<HttpResponse<IPage<IClassRoom>>> {
     var url = this.host + 'classes?page=' + page + '&size=' + size + 
     (filter?"&title=" + filter:"");
     if(levelId) {
@@ -84,54 +96,58 @@ export class ServerService {
       { observe: 'response' });
   }
 
-  getClassRoom(classRoomId: number):Observable<HttpResponse<ClassRoomDetail>> {
+  public getClassRoom(classRoomId: number):Observable<HttpResponse<ClassRoomDetail>> {
     var url = this.host + 'classes/' + classRoomId;
     return this.http.get<ClassRoomDetail>(url, 
       { observe: 'response' });
   }
 
-  putClassRoom(classRoomId:number, json:object):Observable<HttpResponse<ILink>> {
+  public putClassRoom(classRoomId:number, json:object):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId;
     return this.http.put<ILink>(url, json, { observe: 'response' });
   }
 
-  postClassRoom(json:object):Observable<HttpResponse<ILink>> {
+  public postClassRoom(json:object):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes';
     return this.http.post<ILink>(url, json, { observe: 'response' });
   }
 
     /** CLASES -> NIVELES */
-  addLevelsToClass(classRoomId: number, json: object[]):Observable<HttpResponse<ILink>> {
+  public addLevelsToClass(classRoomId: number, json: object[]):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/levels';
     return this.http.post<ILink>(url, json, { observe: 'response' });
   }
 
-  deleteLevelsOfClass(classRoomId: number, levelId: string):Observable<HttpResponse<ILink>> {
+  public deleteLevelsOfClass(classRoomId: number, levelId: string):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/levels/' + levelId;
     return this.http.delete<ILink>(url, { observe: 'response' });
   }
 
   /** CLASES -> PROFESORES */
-  addTeachersToClass(classRoomId: number, json: string[]):Observable<HttpResponse<ILink>> {
+  public addTeachersToClass(classRoomId: number, json: string[]):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/teachers';
     return this.http.post<ILink>(url, json, { observe: 'response' });
   }
-  deleteTeacherOfClass(classRoomId: number, teacherId: string):Observable<HttpResponse<ILink>> {
+  public deleteTeacherOfClass(classRoomId: number, teacherId: string):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/teachers/' + teacherId;
     return this.http.delete<ILink>(url, { observe: 'response' });
   }
   /** CLASES -> ESTUDIANTES */
-  addStudentsToClass(classRoomId: number, json: string[]):Observable<HttpResponse<ILink>> {
+  public addStudentsToClass(classRoomId: number, json: string[]):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/students';
     return this.http.post<ILink>(url, json, { observe: 'response' });
   }
-  deleteStudentOfClass(classRoomId: number, studentsId: string):Observable<HttpResponse<ILink>> {
+  public deleteStudentOfClass(classRoomId: number, studentsId: string):Observable<HttpResponse<ILink>> {
     const url = this.host + 'classes/' + classRoomId + '/students/' + studentsId;
     return this.http.delete<ILink>(url, { observe: 'response' });
   }
   /** LEVELS */
 
-  getLevels(page: number, size: number,classId: number, userId: number, filter:string = null):Observable<HttpResponse<IPage<ILevelWithImage>>> {
+  public getLevels(page: number, size: number,
+    classId?: number, 
+    userId?: number, 
+    filter:string = null
+  ):Observable<HttpResponse<IPage<ILevelWithImage>>> {
    debugger 
    var url = this.host + 'levels?page=' + page + '&size=' + size + 
     (filter?"&title=" + filter:"");
@@ -145,15 +161,48 @@ export class ServerService {
       { observe: 'response' });
   }
 
-  getLevel(levelId: number):Observable<HttpResponse<LevelDetail>> {
+  public getLevel(levelId: number):Observable<HttpResponse<LevelDetail>> {
       var url = this.host + 'levels/' + levelId;
       return this.http.get<LevelDetail>(url, 
         { observe: 'response' });
   }
   
-  putLevel(id:number, json:object):Observable<HttpResponse<ILink>> {
+  public putLevel(id:number, json:object):Observable<HttpResponse<ILink>> {
     const url = this.host + 'levels/' + id;
     return this.http.put<ILink>(url, json, { observe: 'response' });
   }
 
+
+  /** PLAYLISTS */
+  public getPlaylists(
+    page: number, size: number,
+    userId?: number,
+    playslistId?: number,
+    filter: string = null
+  ): Observable<HttpResponse<IPage<IPlaylist>>> {
+    debugger 
+    var url = this.host + 'playlists?page=' + page + '&size=' + size + 
+     (filter?"&title=" + filter:"");
+ 
+     if(playslistId) {
+       url = url + '&playlist=' + playslistId;
+     } else if(userId){
+       url = url + '&user=' + userId;
+     }
+     return this.http.get<IPage<IPlaylist>>(url, 
+       { observe: 'response' });
+   }
+
+   public getPlaylist(playlistId: number):Observable<HttpResponse<IPlaylist>> {
+       var url = this.host + 'playlists/' + playlistId;
+       return this.http.get<IPlaylist>(url, 
+         { observe: 'response' });
+   }
+
+   /** PLAYLIST -> NIVELES */
+
+   public addLevelsToPlaylist(playlistId: number, json: string[]):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'playlists/' + playlistId;
+    return this.http.put<ILink>(url, json, { observe: 'response' });
+  }
 }
