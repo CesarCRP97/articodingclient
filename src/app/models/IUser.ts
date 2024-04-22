@@ -4,4 +4,6 @@ export interface IUser {
     password: string;
     enabled: boolean;
     rol: string;
+    likedLevels: number[];
+    likedPlaylists: number[];
 }
