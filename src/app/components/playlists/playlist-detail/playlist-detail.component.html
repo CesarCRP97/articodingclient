@@ -3,41 +3,35 @@
         <div class="row">
             <div class="col-md-12" *ngIf="playlist">
                 <div class="card">
-                    <div class="col card-header card-header-info align-self-end" style="font-weight: bold;"> 
-                        {{(playlist ? "Playlist : " + playlist.title: '') | uppercase}}
+                    <div class="col card-header card-header-info align-self-end d-flex justify-content-between" style="font-weight: bold;"> 
+                        <div>{{(playlist ? "Nombre: " + playlist.title: '') | uppercase}}</div>
+                        <div>{{(playlist ? "Autor: " + playlist.owner.username: '') | uppercase}}</div>
+                        <div>{{(playlist ? "ID: " + playlist.id: '') | uppercase}}</div>
                     </div>
                     <div class="card-body">
-                        <!--
-                            <form style="width: 100%;" [formGroup]="formClassRoom" (ngSubmit)="editClassRoom()">
+                            <form style="width: 100%;" [formGroup]="formPlaylist" (ngSubmit)="editPlaylist()">
                                 <div class="row">
                                     <div class="col-3">
                                         <mat-slide-toggle color="primary"  
-                                        [checked]="classRoom.enabled" 
-                                        (change)="classRoom.enabled = !classRoom.enabled"
+                                        [checked]="playlist.enabled" 
+                                        (change)="playlist.enabled = !playlist.enabled"
                                         formControlName="enabled">
                                          Activado</mat-slide-toggle>    
                                     </div>
                                     <mat-form-field class="col-6">
                                         <mat-label>Nombre</mat-label>
                                         <input matInput matInput type="string" 
-                                        [(ngModel)]="classRoom.name" formControlName="name" 
+                                        [(ngModel)]="playlist.title" formControlName="name" 
                                         placeholder="Nombre">
                                     </mat-form-field>   
                                 </div>
                                 <div class="row">
-                                    <mat-form-field class="col-9">
-                                        <mat-label>Descripción</mat-label>
-                                        <input matInput matInput type="string" 
-                                        [(ngModel)]="classRoom.description" formControlName="description" 
-                                        placeholder="Descripción">
-                                    </mat-form-field>  
                                     <button mat-raised-button class="btn btn-info pull-center" type="submit" 
-                                    [disabled]="!(formClassRoom.valid && formClassRoom.dirty)">
+                                    [disabled]="!(formPlaylist.valid && formPlaylist.dirty)">
                                     {{'Guardar'}}</button>
                                 </div>
                             <div class="clearfix"></div>
                             </form>
-                        -->
                         <div class="row" *ngIf="!isNew">
                             <div class="col-12">
                                 <mat-divider></mat-divider>

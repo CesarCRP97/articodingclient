@@ -28,11 +28,9 @@ export class PlaylistDetailComponent implements OnInit {
 
   isNew = false;
 
-  formClassRoom: FormGroup;
+  formPlaylist: FormGroup;
   
   formLevels: FormGroup;
-  formStudents: FormGroup;
-  formTeachers: FormGroup;
 
   newLevels: String;
 
@@ -59,7 +57,7 @@ export class PlaylistDetailComponent implements OnInit {
     } else {
       this.isNew = true;
       this.playlist = new PlaylistDetail();
-      this.formClassRoom = this.formBuilder.group({
+      this.formPlaylist = this.formBuilder.group({
         name: [this.playlist.title],
         enabled: [this.playlist.enabled]
       });
@@ -74,7 +72,7 @@ export class PlaylistDetailComponent implements OnInit {
         res => {
           if (res.status === 200) {
             this.playlist = res.body;
-            this.formClassRoom = this.formBuilder.group({
+            this.formPlaylist = this.formBuilder.group({
               name: [this.playlist.title],
               enabled: [this.playlist.enabled]
             });
@@ -89,8 +87,8 @@ export class PlaylistDetailComponent implements OnInit {
       this.subRefs$.push(
         this.serverService.putClassRoom(this.playlistId, 
           { 
-            name: this.formClassRoom.controls.name.value,
-            description: this.formClassRoom.controls.description.value,
+            name: this.formPlaylist.controls.name.value,
+            description: this.formPlaylist.controls.description.value,
             enabled: this.playlist.enabled
           }
         ).subscribe(  res => {
@@ -104,8 +102,8 @@ export class PlaylistDetailComponent implements OnInit {
       this.subRefs$.push(
         this.serverService.postClassRoom(
           { 
-            name: this.formClassRoom.controls.name.value,
-            description: this.formClassRoom.controls.description.value,
+            name: this.formPlaylist.controls.name.value,
+            description: this.formPlaylist.controls.description.value,
             enabled: this.playlist.enabled,
             studentsId: [],
             teachersId: []
