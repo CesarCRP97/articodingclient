@@ -1,5 +1,6 @@
 import { IUser } from "./IUser";
 import { ILevel } from "./ILevel";
+import { LevelsCompletedByUsers } from "./LevelsCompletedByUsers";
 
 export class ClassRoomDetail {
 
@@ -8,8 +9,9 @@ export class ClassRoomDetail {
     teachers: IUser[];
     students: IUser[];
     levels: ILevel[];
+    levelsCompletedByUsers : LevelsCompletedByUsers[];
     enabled: boolean;
-    key : string;
+    classKey : string;
 
     constructor() {
         this.name = '';
@@ -17,8 +19,9 @@ export class ClassRoomDetail {
         this.teachers = [];
         this.students = [];
         this.levels = [];
+        this.levelsCompletedByUsers = [];
         this.enabled = true;
-        this.key = '';
+        this.classKey = '';
 
     }
 }

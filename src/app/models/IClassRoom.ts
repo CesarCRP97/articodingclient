@@ -7,5 +7,5 @@ export interface IClassRoom {
     teachers: IUser[];
     students: number;
     levels: number;
-    key: string;
+    classKey: string;
 }

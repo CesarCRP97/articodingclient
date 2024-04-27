@@ -4,7 +4,7 @@
             <div class="col-md-12" *ngIf="classRoom">
                 <div class="card">
                     <div class="col card-header card-header-info align-self-end" style="font-weight: bold;"> 
-                        {{(classRoom ? "Clave : " + classRoom.key: '') | uppercase}}
+                        {{(classRoom ? "Clave : " + classRoom.classKey: '') | uppercase}}
                     </div>
                     <div class="card-body">
     
@@ -58,7 +58,7 @@
                                 
                                     </form>
                                     <mat-table [dataSource]="classRoom.levels"  #levels="matTable" levels>
-                                        <ng-container matColumnDef="id">
+                                        <ng-container matColumnDef="id">''
                                             <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                             <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
                                         </ng-container>
