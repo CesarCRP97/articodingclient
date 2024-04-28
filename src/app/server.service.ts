@@ -14,6 +14,7 @@ import { LevelDetail } from './models/LevelDetail';
 import { ClassRoomDetail } from './models/ClassRoomDetail';
 import { environment } from '../environments/environment';
 import { IPlaylist } from './models/IPlaylist';
+import { PlaylistForm } from './models/PlaylistForm';
 
 @Injectable({
   providedIn: 'root'
@@ -161,9 +162,9 @@ export class ServerService {
       { observe: 'response' });
   }
 
-  public getLevel(levelId: number):Observable<HttpResponse<LevelDetail>> {
+  public getLevel(levelId: number):Observable<HttpResponse<ILevelWithImage>> {
       var url = this.host + 'levels/' + levelId;
-      return this.http.get<LevelDetail>(url, 
+      return this.http.get<ILevelWithImage>(url, 
         { observe: 'response' });
   }
   
@@ -201,8 +202,8 @@ export class ServerService {
 
    /** PLAYLIST -> NIVELES */
 
-   public addLevelsToPlaylist(playlistId: number, json: string[]):Observable<HttpResponse<ILink>> {
+   public addLevelsToPlaylist(playlistId: number, playlistForm: PlaylistForm):Observable<HttpResponse<ILink>> {
     const url = this.host + 'playlists/' + playlistId;
-    return this.http.put<ILink>(url, json, { observe: 'response' });
+    return this.http.put<ILink>(url, playlistForm, { observe: 'response' });
   }
 }

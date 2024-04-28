@@ -10,6 +10,7 @@ export interface ILevel {
     classRooms: number;
     likes: number;
     timesPlayed: number;
+    active: boolean;
     
 }
 
