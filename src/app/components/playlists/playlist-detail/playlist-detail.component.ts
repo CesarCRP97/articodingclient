@@ -1,10 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import ValidationError from 'ajv/dist/runtime/validation_error';
+import { LevelsComponent } from 'app/components/levels/levels.component';
 import { ClassRoomDetail } from 'app/models/ClassRoomDetail';
-import { ILevel } from 'app/models/ILevel';
+import { ILevel, ILevelWithImage } from 'app/models/ILevel';
 import { IUser } from 'app/models/IUser';
 import { PlaylistDetail } from 'app/models/PlaylistDetail';
 import { ServerService } from 'app/server.service';
@@ -22,9 +25,9 @@ export class PlaylistDetailComponent implements OnInit {
 
   playlist: PlaylistDetail;
   
-  allLevels;
-  selectedLevel;
-  levesOnClassroom;
+
+  // Rollover mostrar niveles y permitir anadir desde esta lista
+  levelsComponent : LevelsComponent;
 
   isNew = false;
 
@@ -32,6 +35,7 @@ export class PlaylistDetailComponent implements OnInit {
   
   formLevels: FormGroup;
 
+  //Campo en el que se anaden los ids de niveles "1,5,6,123" y luego se splitean y se anaden al formLevels
   newLevels: String;
 
   displayedLevels = ['id', 'title', 'active', 'actions'];
@@ -121,19 +125,18 @@ export class PlaylistDetailComponent implements OnInit {
     }
   }
 
-
-  /**
   addLevels() {
-    var numbers: string[] = this.newLevels.trim().split(',');
-    var valid = numbers.filter(n => !Number(n));
-    if (valid.length > 0) {
+    const numbers = this.newLevels.trim().split(',')
+        .filter(n => !Number(n))
+        .map(n => parseInt(n));
+    //valid guarda aquellos elementos que no sean numeros. Por lo que si valid.length > 0, hay ids que no son correctos.
+    if (numbers.length > 0) {
       this.formLevels.controls['newLevels'].setErrors({'incorrect': true});
       alert("Debe indicar el identificador de la clase o clases, separado por comas.\n" +
       "Por ejemplo: 1,2,3");
     } else {
-      var ids: object[] = numbers.map(n => {return {id : n}});
       this.subRefs$.push(
-        this.serverService.addLevelsToPlaylist(this.playlistId, ids)
+        this.serverService.addLevelsToPlaylist(this.playlistId, { levels: numbers })
         .subscribe(
           res => {
             if (res.status === 200) {
@@ -146,7 +149,7 @@ export class PlaylistDetailComponent implements OnInit {
     }
     
   }
-  */
+
   deleteLevel(event: MouseEvent, levelId: string) {
     event.preventDefault();
     event.stopPropagation();
