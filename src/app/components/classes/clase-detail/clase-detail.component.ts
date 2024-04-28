@@ -242,4 +242,13 @@ export class ClaseDetailComponent implements OnInit {
       window.location.reload();
     });
   }
+
+  levelBeenCompletedByStudent(studentID: number, levelID: number): boolean {
+    let listCompleted = this.classRoom.levelsCompletedByUsers;
+    if(listCompleted.find((level) => level.user.id === studentID && level.level.id === levelID) !== undefined) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
