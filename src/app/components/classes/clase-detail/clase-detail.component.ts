@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import ValidationError from 'ajv/dist/runtime/validation_error';
 import { ClassRoomDetail } from 'app/models/ClassRoomDetail';
+import { ILevel } from 'app/models/ILevel';
+import { IUser } from 'app/models/IUser';
 import { ServerService } from 'app/server.service';
 import { Subscription } from 'rxjs';
 
