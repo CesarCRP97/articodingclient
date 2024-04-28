@@ -2,6 +2,7 @@ import { IUser } from "./IUser";
 
 export interface ILevel {
 
+    id: number;
     title: string;
     description: string;
     publicLevel: boolean;
