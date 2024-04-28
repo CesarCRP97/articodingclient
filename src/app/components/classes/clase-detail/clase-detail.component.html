@@ -41,6 +41,43 @@
                         <div class="row" *ngIf="!isNew">
                             <div class="col-12">
                                 <mat-divider></mat-divider>
+                                <h3>Estado de la clase</h3>
+                                    <style>
+                                        table {
+                                        border-collapse: collapse; /* Combina los bordes de las celdas */
+                                        }
+                                    
+                                        th, td {
+                                        border: 1px solid rgba(214, 214, 214, 0.605); /* Agrega un borde a todas las celdas */
+                                        padding: 8px; /* Espaciado interno */
+                                        }
+                                        td {
+                                            text-align: left; /* Alineación del texto */
+                                        }
+                                    
+                                        th {
+                                        background-color: #ffffff; /* Color de fondo para las celdas de encabezado */
+                                        text-align: center; /* Alineación del texto */
+                                        }
+                                    </style>
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Alumnos</th>
+                                            <th *ngFor="let level of classRoom.levels">{{ level.title }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+            
+                                        <tr *ngFor="let student of classRoom.students">
+                                            <td>{{ student.username }}</td>
+                                            <td *ngFor="let level of classRoom.levels" [style.background-color]= "levelBeenCompletedByStudent(student.id, level.id) ? 'green' : 'white'">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>  
+
+                                <mat-divider></mat-divider>
                                     <h3>Niveles</h3>
                                     <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
                                         <mat-form-field class="col-6">

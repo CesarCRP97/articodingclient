@@ -1,6 +1,6 @@
 import { IUser } from "./IUser";
 import { ILevel } from "./ILevel";
-import { LevelsCompletedByUsers } from "./LevelsCompletedByUsers";
+import { LevelsCompletedResponse } from "./LevelsCompletedResponse";
 
 export class ClassRoomDetail {
 
@@ -9,7 +9,7 @@ export class ClassRoomDetail {
     teachers: IUser[];
     students: IUser[];
     levels: ILevel[];
-    levelsCompletedByUsers : LevelsCompletedByUsers[];
+    levelsCompletedByUsers : LevelsCompletedResponse[];
     enabled: boolean;
     classKey : string;
 
