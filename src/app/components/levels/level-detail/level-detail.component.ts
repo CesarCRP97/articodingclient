@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LevelDetail } from 'app/models/LevelDetail';
+import { ILevel } from 'app/models/ILevel';
 import { ServerService } from 'app/server.service';
 import { Subscription } from 'rxjs';
 
@@ -14,7 +14,8 @@ export class LevelDetailComponent implements OnInit {
 
   levelId:number;
   subRefs$: Subscription[] = [];
-  level:LevelDetail;
+  level:ILevel;
+  levelImage:string;
   formLevel: FormGroup;
   
   constructor(private formBuilder: FormBuilder,
@@ -35,7 +36,9 @@ export class LevelDetailComponent implements OnInit {
       .subscribe(
         res => {
           if (res.status === 200) {
-            this.level = res.body;
+            const levelWithImage = res.body;
+            this.level = levelWithImage.level;
+            this.levelImage = levelWithImage.image;
             this.formLevel = this.formBuilder.group({
               title: [this.level.title],
               description: [this.level.description],
