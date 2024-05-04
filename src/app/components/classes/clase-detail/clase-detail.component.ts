@@ -245,4 +245,8 @@ export class ClaseDetailComponent implements OnInit {
   levelBeenCompletedByStudent(studentID: number, levelID: number): boolean {
     return this.classRoom.levelsCompletedByUsers.some(level => level.userId === studentID && level.levelId === levelID);
   }
+
+  private canTableBeDrawn(): boolean {
+    return (this.classRoom.levels.length > 0 && this.classRoom.students.length > 0);
+  }
 }

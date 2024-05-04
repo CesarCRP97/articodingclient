@@ -41,7 +41,8 @@
                         <div class="row" *ngIf="!isNew">
                             <div class="col-12">
                                 <mat-divider></mat-divider>
-                                <h3>Estado de la clase</h3>
+                                <div class="col-12" *ngIf="canTableBeDrawn()" style="padding-bottom: 20px;">
+                                    <h3>Estado de la clase</h3>
                                     <style>
                                         table {
                                         border-collapse: collapse; /* Combina los bordes de las celdas */
@@ -75,8 +76,10 @@
                                             </td>
                                         </tr>
                                         </tbody>
-                                    </table>  
+                                    </table>
 
+
+                                </div>
                                 <mat-divider></mat-divider>
                                     <h3>Niveles</h3>
                                     <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
