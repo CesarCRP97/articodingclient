@@ -35,18 +35,39 @@
                         </form>
                         
                         <h3>Todos los niveles</h3>
+                        <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
+                            <mat-form-field class="col-6">
+                                <mat-label>Añadir nuevos niveles por identificador</mat-label>
+                                <input 
+                                matInput
+                                type="string" 
+                                [(ngModel)]="newAddedLevels" formControlName="newAddedLevels" 
+                                placeholder="1,6,15">
+                                <div *ngIf="newAddedLevels && !newAddedLevels.valid">{{newAddedLevels.errors | json}}</div>
+                            </mat-form-field>
+                            <button style="border: 0; background: transparent;">
+                                <a [disabled]="!(formLevels.valid && formLevels.dirty)" 
+                                type="submit"
+                                class="material-icons" style="color: #00bcd4;">add</a>
+                            </button> 
+                            
+                    
+                        </form>
                         <div class="row">
-                            <mat-form-field width="200px" style="padding-left: 20px;">
+                            
+                            <mat-form-field width="300px" style="padding-left: 30px;">
+                                <mat-label>Filtrar por nombre</mat-label>
                                 <input
                                     matInput
                                     type="string" 
                                     [(ngModel)]="allLevelsNameFilter"
-                                    placeholder="Filtrar por nombre"
+                                    placeholder="Enter para filtrar"
                                     (keyup.enter)="putAllLevelsFilter()">
                              </mat-form-field>
                         </div>
 
                         <mat-table [dataSource]="allLevels" #allLevelsTable="matTable" allLevelsTable>
+                            
                             <ng-container matColumnDef="id">
                                 <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                 <mat-cell *matCellDef="let item">{{item.level.id}}</mat-cell>
@@ -55,9 +76,37 @@
                                 <mat-header-cell *matHeaderCellDef>Título</mat-header-cell>
                                 <mat-cell *matCellDef="let item">{{item.level.title}}</mat-cell>
                             </ng-container>
+                            <ng-container matColumnDef="owner">
+                                <mat-header-cell *matHeaderCellDef>Autor</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.level.owner.username}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="likes">
+                                <mat-header-cell *matHeaderCellDef>Numero de Likes</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.level.likes}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="timesPlayed">
+                                <mat-header-cell *matHeaderCellDef>Veces jugado</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.level.timesPlayed}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                <mat-cell *matCellDef="let item">
+                                    <a *ngIf="!isAlreadyInPlaylist(item.level.id)" 
+                                    class="material-icons"
+                                    style="cursor:context-menu;z-index:1000;color: rgba(0, 224, 56, 0.863)"  
+                                        (click)="addLevel($event, item.level.id)">add</a>
+
+                                    <a *ngIf="isAlreadyInPlaylist(item.level.id)"></a>
+                                </mat-cell>
+                            </ng-container>
+                            
 
                             <mat-header-row *matHeaderRowDef="allLevelsColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: allLevelsColumns"></mat-row>
+                            <mat-row *matRowDef="let row; columns: allLevelsColumns"
+                            matTooltip="Ver detalle de nivel"
+                            matTooltipPositionAtOrigin="true"
+                            hideDelay="1000"
+                            (click)="goLevel(row.level.id)"></mat-row>
                         </mat-table>
                         <mat-paginator
                             #paginator
@@ -72,14 +121,44 @@
                         <mat-divider></mat-divider>
 
                         <h3>Niveles en la playlist</h3>
+
                         <mat-table [dataSource]="playlistDetail.levels" #levelsTable="matTable" levelsTable>
                             <ng-container matColumnDef="id">
                                 <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
                                 <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
                             </ng-container>
+                            <ng-container matColumnDef="title">
+                                <mat-header-cell *matHeaderCellDef>Título</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.title}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="owner">
+                                <mat-header-cell *matHeaderCellDef>Autor</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.owner.username}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="likes">
+                                <mat-header-cell *matHeaderCellDef>Numero de Likes</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.likes}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="timesPlayed">
+                                <mat-header-cell *matHeaderCellDef>Veces jugado</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.timesPlayed}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                <mat-cell *matCellDef="let item">
+                                    <a class="material-icons"
+                                    style="cursor:context-menu;z-index:1000;color: rgba(252, 59, 59, 0.635)"  
+                                        (click)="deleteLevel($event, item.id)">delete</a>
+                                </mat-cell>
+                            </ng-container>
 
                             <mat-header-row *matHeaderRowDef="playlistLevelsColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: playlistLevelsColumns"></mat-row>
+                            <mat-row *matRowDef="let row; columns: playlistLevelsColumns"
+                            matTooltip="Ver detalle de nivel"
+                            matTooltipPositionAtOrigin="true"
+                            hideDelay="1000"
+                            (click)="goLevel(row.id)">
+                            </mat-row>
                         </mat-table>
                     </div>
                 </div>

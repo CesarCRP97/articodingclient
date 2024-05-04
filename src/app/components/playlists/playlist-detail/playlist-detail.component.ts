@@ -1,3 +1,4 @@
+import { PlaylistForm } from './../../../models/PlaylistForm';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
@@ -21,6 +22,9 @@ export class PlaylistDetailComponent implements OnInit {
     public playlistLevelsColumns = ["id", "title", "owner", "likes", "timesPlayed", "actions"];
     public playlistDetail: PlaylistDetail;
     public formPlaylist: FormGroup;
+    public formLevels: FormGroup;
+
+    public newAddedLevels: String;
 
     public allLevelsColumns = ["id", "title", "owner", "likes", "timesPlayed", "actions"];
     public allLevels: ILevelWithImage[];
@@ -33,6 +37,9 @@ export class PlaylistDetailComponent implements OnInit {
         private serverService: ServerService,
         private activateRoute: ActivatedRoute,
     ) {
+        this.formLevels  =this.formBuilder.group({
+            newAddedLevels: [this.newAddedLevels]});
+
         this.allLevelsPagination.pageIndex = 0;
         this.allLevelsPagination.pageSize = 5;
 
@@ -130,4 +137,74 @@ export class PlaylistDetailComponent implements OnInit {
             }, err => alert(err.error.message))
         );
     }
+
+    private addLevel(event: MouseEvent, levelId: string) {
+        event.preventDefault();
+        event.stopPropagation();
+        if(confirm('¿Está seguro de agregar el nivel '+ levelId + ' a la clase?')) {
+            this.subRefs$.push(
+            this.serverService.addLevelsToPlaylist(this.playlistId, {'levels' : [levelId]})
+            .subscribe(
+                res => {
+                if (res.status === 200) {
+                    this.getPlaylist();
+                } else alert('Algo ha pasado... ' + res.status);
+                }, err => alert(err.error.message)
+            )
+            );
+        }
+    }
+    addLevels() {
+        const numbers = this.newAddedLevels.trim().split(',')
+            .filter(n => Number(n))
+            .map(n => parseInt(n));
+        //valid guarda aquellos elementos que no sean numeros. Por lo que si valid.length > 0, hay ids que no son correctos.
+        if (numbers.length == 0) {
+          this.formLevels.controls['newLevels'].setErrors({'incorrect': true});
+          alert("Debe indicar el identificador de la clase o clases, separado por comas.\n" +
+          "Por ejemplo: 1,2,3");
+        } else {
+          console.log(numbers);
+          this.subRefs$.push(
+            this.serverService.addLevelsToPlaylist(this.playlistId, { 'levels' : numbers })
+            .subscribe(
+              res => {
+                if (res.status === 200) {
+                  this.formLevels.reset();
+                  this.getPlaylist();
+                } else alert('Algo ha pasado... ' + res.status);
+              }, err => alert(err.error.message)
+            )
+          );
+        }
+        
+      }
+
+    private deleteLevel(event: MouseEvent, levelId: string) {
+        event.preventDefault();
+        event.stopPropagation();
+        if(confirm('¿Está seguro de eliminar el nivel '+ levelId + ' de la clase?')) {
+            this.subRefs$.push(
+            this.serverService.deleteLevelOfPlaylist(this.playlistId, levelId)
+            .subscribe(
+                res => {
+                if (res.status === 200) {
+                    this.getPlaylist();
+                } else alert('Algo ha pasado... ' + res.status);
+                }, err => alert(err.error.message)
+            )
+            );
+        }
+    }
+
+    private isAlreadyInPlaylist(levelId: number): boolean {
+        return this.playlistDetail.levels.some(containedLevel => containedLevel.id === levelId);
+    }
+
+    private goLevel(levelId: string) {
+        const currentUrl = '/#/levels/' + levelId;
+        this.router.navigateByUrl(currentUrl).then(() => {
+          window.location.reload();
+        });
+      }
 }

@@ -14,7 +14,6 @@ import { LevelDetail } from './models/LevelDetail';
 import { ClassRoomDetail } from './models/ClassRoomDetail';
 import { environment } from '../environments/environment';
 import { IPlaylist } from './models/IPlaylist';
-import { PlaylistForm } from './models/PlaylistForm';
 
 @Injectable({
   providedIn: 'root'
@@ -202,9 +201,9 @@ export class ServerService {
 
    /** PLAYLIST -> NIVELES */
 
-   public addLevelsToPlaylist(playlistId: number, playlistForm: PlaylistForm):Observable<HttpResponse<ILink>> {
+  public addLevelsToPlaylist(playlistId: number, json: object):Observable<HttpResponse<ILink>> {
     const url = this.host + 'playlists/' + playlistId;
-    return this.http.put<ILink>(url, playlistForm, { observe: 'response' });
+    return this.http.put<ILink>(url, json, { observe: 'response' });
   }
 
   public deleteLevelOfPlaylist(playlistId: number, levelId: string):Observable<HttpResponse<ILink>> {
