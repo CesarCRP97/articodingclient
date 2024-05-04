@@ -1,93 +1,89 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12" *ngIf="playlist">
+            <div class="col-md-12" *ngIf="playlistDetail">
                 <div class="card">
                     <div class="col card-header card-header-info align-self-end d-flex justify-content-between" style="font-weight: bold;"> 
-                        <div>{{(playlist ? "Nombre: " + playlist.title: '') | uppercase}}</div>
-                        <div>{{(playlist ? "Autor: " + playlist.owner.username: '') | uppercase}}</div>
-                        <div>{{(playlist ? "ID: " + playlist.id: '') | uppercase}}</div>
+                        <div>{{(playlistDetail ? "Nombre: " + playlistDetail.title: '') | uppercase}}</div>
+                        <div>{{(playlistDetail ? "Autor: " + playlistDetail.owner.username: '') | uppercase}}</div>
+                        <div>{{(playlistDetail ? "ID: " + playlistDetail.id: '') | uppercase}}</div>
                     </div>
+
                     <div class="card-body">
-                            <form style="width: 100%;" [formGroup]="formPlaylist" (ngSubmit)="editPlaylist()">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <mat-slide-toggle color="primary"  
-                                        [checked]="playlist.enabled" 
-                                        (change)="playlist.enabled = !playlist.enabled"
-                                        formControlName="enabled">
-                                         Activado</mat-slide-toggle>    
-                                    </div>
-                                    <mat-form-field class="col-6">
-                                        <mat-label>Nombre</mat-label>
-                                        <input matInput matInput type="string" 
-                                        [(ngModel)]="playlist.title" formControlName="name" 
-                                        placeholder="Nombre">
-                                    </mat-form-field>   
+                        <form style="width: 100%;" [formGroup]="formPlaylist" (ngSubmit)="editPlaylist()">
+                            <div class="row">
+                                <div class="col-3">
+                                    <mat-slide-toggle color="primary"  
+                                    [checked]="playlistDetail.enabled" 
+                                    (change)="playlistDetail.enabled = !playlistDetail.enabled"
+                                    formControlName="enabled">
+                                     Activado</mat-slide-toggle>    
                                 </div>
-                                <div class="row">
-                                    <button mat-raised-button class="btn btn-info pull-center" type="submit" 
-                                    [disabled]="!(formPlaylist.valid && formPlaylist.dirty)">
-                                    {{'Guardar'}}</button>
-                                </div>
-                            <div class="clearfix"></div>
-                            </form>
-                        <div class="row" *ngIf="!isNew">
-                            <div class="col-12">
-                                <mat-divider></mat-divider>
-                                    <h3>Niveles</h3>
-                                    <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
-                                        <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos niveles por identificador</mat-label>
-                                            <input matInput type="string" 
-                                            [(ngModel)]="newLevels" formControlName="newLevels" 
-                                            placeholder="1,6,15">
-                                            <div *ngIf="newLevels && !newLevels.valid">{{newLevels.errors| json}}</div>
-                                        </mat-form-field>
-                                        <button style="border: 0; background: transparent;">
-                                            <a [disabled]="!(formLevels.valid && formLevels.dirty)" 
-                                            type="submit"
-                                            class="material-icons" style="color: #00bcd4;">add</a>
-                                        </button> 
-                                    </form>
-                                    <mat-table [dataSource]="playlist.levels"  #levels="matTable" levels>
-                                        <ng-container matColumnDef="id">''
-                                            <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
-                                        </ng-container>
-                                        <ng-container matColumnDef="title">
-                                            <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
-                                        </ng-container>
-                                        <ng-container matColumnDef="active">
-                                            <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">{{level.active}}</mat-cell>
-                                        </ng-container>
-                                        <ng-container matColumnDef="actions">
-                                            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">
-                                                <a class="material-icons"
-                                                style="cursor:context-menu;z-index:1000;color: rgba(252, 59, 59, 0.635)"  
-                                                    (click)="deleteLevel($event, level.id)">delete</a>
-                                            </mat-cell>
-                                        </ng-container>
-                                        <mat-header-row *matHeaderRowDef="displayedLevels"></mat-header-row>
-                                        <mat-row  *matRowDef="let row; columns: displayedLevels"  
-                                        matTooltip="Ver detalle de nivel"
-                                        matTooltipPositionAtOrigin="true"
-                                        hideDelay="1000"
-                                        (click)="goLevel(row.id)"></mat-row>
-                                    </mat-table>
+                                <mat-form-field class="col-6">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput matInput type="string" 
+                                    [(ngModel)]="playlistDetail.title" formControlName="name" 
+                                    placeholder="Nombre">
+                                </mat-form-field>   
                             </div>
+                            <div class="row">
+                                <button mat-raised-button class="btn btn-info pull-center" type="submit" 
+                                [disabled]="!(formPlaylist.valid && formPlaylist.dirty)">
+                                {{'Guardar'}}</button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                        
+                        <h3>Todos los niveles</h3>
+                        <div class="row">
+                            <mat-form-field width="200px" style="padding-left: 20px;">
+                                <input
+                                    matInput
+                                    type="string" 
+                                    [(ngModel)]="allLevelsNameFilter"
+                                    placeholder="Filtrar por nombre"
+                                    (keyup.enter)="putAllLevelsFilter()">
+                             </mat-form-field>
                         </div>
+
+                        <mat-table [dataSource]="allLevels" #allLevelsTable="matTable" allLevelsTable>
+                            <ng-container matColumnDef="id">
+                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.level.id}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="title">
+                                <mat-header-cell *matHeaderCellDef>Título</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.level.title}}</mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="allLevelsColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: allLevelsColumns"></mat-row>
+                        </mat-table>
+                        <mat-paginator
+                            #paginator
+                            [length]="allLevelsPagination.length"
+                            [pageIndex]="allLevelsPagination.pageIndex"
+                            [pageSize]="allLevelsPagination.pageSize"
+                            [pageSizeOptions]="[5, 10, 25, 100]"
+                            (page)="getLevels($event)"
+                            [showFirstLastButtons]="true">
+                        </mat-paginator>
+
+                        <mat-divider></mat-divider>
+
+                        <h3>Niveles en la playlist</h3>
+                        <mat-table [dataSource]="playlistDetail.levels" #levelsTable="matTable" levelsTable>
+                            <ng-container matColumnDef="id">
+                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="playlistLevelsColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: playlistLevelsColumns"></mat-row>
+                        </mat-table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<style>
-    .mat-row:hover {
-    background-color: #00bbd442;
-    }
-</style>

@@ -145,7 +145,7 @@ export class ServerService {
   /** LEVELS */
 
   public getLevels(page: number, size: number,
-    classId?: number, 
+    classId?: number,
     userId?: number, 
     filter:string = null
   ):Observable<HttpResponse<IPage<ILevelWithImage>>> {
@@ -205,5 +205,20 @@ export class ServerService {
    public addLevelsToPlaylist(playlistId: number, playlistForm: PlaylistForm):Observable<HttpResponse<ILink>> {
     const url = this.host + 'playlists/' + playlistId;
     return this.http.put<ILink>(url, playlistForm, { observe: 'response' });
+  }
+
+  public deleteLevelOfPlaylist(playlistId: number, levelId: string):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'playlists/' + playlistId + '/levels/' + levelId;
+    return this.http.delete<ILink>(url, { observe: 'response' });
+  }
+
+  public putPlaylist(json:object):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'playlists';
+    return this.http.put<ILink>(url, json, { observe: 'response' });
+  }
+
+  public postPlaylist(json:object):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'playlists';
+    return this.http.post<ILink>(url, json, { observe: 'response' });
   }
 }
