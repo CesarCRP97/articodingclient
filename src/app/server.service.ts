@@ -50,6 +50,12 @@ export class ServerService {
       { observe: 'response' });
   }
 
+  public getTeachers(page: number, size: number):Observable<HttpResponse<IPage<IUser>>> {
+    var url = this.host + 'users/teachers' + '?page=' + page + '&size=' + size;
+    return this.http.get<IPage<IUser>>(url, 
+      { observe: 'response' });
+  }
+
   public getUser(userId: number):Observable<HttpResponse<IUserDetail>> {
     var url = this.host + 'users/' + userId;
     return this.http.get<IUserDetail>(url, 
@@ -113,9 +119,9 @@ export class ServerService {
   }
 
     /** CLASES -> NIVELES */
-  public addLevelsToClass(classRoomId: number, json: object[]):Observable<HttpResponse<ILink>> {
-    const url = this.host + 'classes/' + classRoomId + '/levels';
-    return this.http.post<ILink>(url, json, { observe: 'response' });
+  public addLevelsToClass(classRoomId: number, json: object):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'classes/' + classRoomId;
+    return this.http.put<ILink>(url, json, { observe: 'response' });
   }
 
   public deleteLevelsOfClass(classRoomId: number, levelId: string):Observable<HttpResponse<ILink>> {
@@ -211,8 +217,8 @@ export class ServerService {
     return this.http.delete<ILink>(url, { observe: 'response' });
   }
 
-  public putPlaylist(json:object):Observable<HttpResponse<ILink>> {
-    const url = this.host + 'playlists';
+  public putPlaylist(playlistId: number,json:object):Observable<HttpResponse<ILink>> {
+    const url = this.host + 'playlists' + playlistId;
     return this.http.put<ILink>(url, json, { observe: 'response' });
   }
 

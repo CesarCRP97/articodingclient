@@ -77,130 +77,326 @@
                                         </tr>
                                         </tbody>
                                     </table>
-
-
                                 </div>
+
                                 <mat-divider></mat-divider>
-                                    <h3>Niveles</h3>
-                                    <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
-                                        <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos niveles por identificador</mat-label>
-                                            <input matInput type="string" 
-                                            [(ngModel)]="newLevels" formControlName="newLevels" 
-                                            placeholder="1,6,15">
-                                            <div *ngIf="newLevels && !newLevels.valid">{{newLevels.errors| json}}</div>
-                                        </mat-form-field>
-                                        <button style="border: 0; background: transparent;">
-                                            <a [disabled]="!(formLevels.valid && formLevels.dirty)" 
-                                            type="submit"
-                                            class="material-icons" style="color: #00bcd4;">add</a>
-                                        </button> 
+                                <h3>Todos los niveles</h3>
+
+                                <form class="row" style="width: 100%;" [formGroup]="formLevels" (ngSubmit)="addLevels()">
+                                    <mat-form-field class="col-6">
+                                        <mat-label>Añadir nuevos niveles por identificador</mat-label>
+                                        <input matInput type="string" 
+                                        [(ngModel)]="newLevels" formControlName="newLevels" 
+                                        placeholder="1,6,15">
+                                        <div *ngIf="newLevels && !newLevels.valid">{{newLevels.errors| json}}</div>
+                                    </mat-form-field>
+                                    <button style="border: 0; background: transparent;">
+                                        <a [disabled]="!(formLevels.valid && formLevels.dirty)" 
+                                        type="submit"
+                                        class="material-icons" style="color: #00bcd4;">add</a>
+                                    </button> 
+                                </form>
+                                <div class="row">
+                            
+                                    <mat-form-field width="300px" style="padding-left: 30px;">
+                                        <mat-label>Filtrar por nombre</mat-label>
+                                        <input
+                                            matInput
+                                            type="string" 
+                                            [(ngModel)]="allLevelsNameFilter"
+                                            placeholder="Enter para filtrar"
+                                            (keyup.enter)="putAllLevelsFilter()">
+                                     </mat-form-field>
+                                </div>
+        
+                                <mat-table [dataSource]="allLevels" #allLevelsTable="matTable" allLevelsTable>
+                                    
+                                    <ng-container matColumnDef="id">
+                                        <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.level.id}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="title">
+                                        <mat-header-cell *matHeaderCellDef>Título</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.level.title}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="owner">
+                                        <mat-header-cell *matHeaderCellDef>Autor</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.level.owner.username}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="likes">
+                                        <mat-header-cell *matHeaderCellDef>Numero de Likes</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.level.likes}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="timesPlayed">
+                                        <mat-header-cell *matHeaderCellDef>Veces jugado</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.level.timesPlayed}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">
+                                            <a *ngIf="!isAlreadyInClassroom(item.level.id)" 
+                                            class="material-icons"
+                                            style="cursor:context-menu;z-index:1000;color: rgba(0, 224, 56, 0.863)"  
+                                                (click)="addLevel($event, item.level.id)">add</a>
+        
+                                            <a *ngIf="isAlreadyInClassroom(item.level.id)"></a>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="allLevelsColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: allLevelsColumns"
+                                    matTooltip="Ver detalle de nivel"
+                                    matTooltipPositionAtOrigin="true"
+                                    hideDelay="1000"
+                                    (click)="goLevel(row.level.id)"></mat-row>
+                                </mat-table>
+                                <mat-paginator
+                                    #paginator
+                                    [length]="allLevelsPagination.length"
+                                    [pageIndex]="allLevelsPagination.pageIndex"
+                                    [pageSize]="allLevelsPagination.pageSize"
+                                    [pageSizeOptions]="[5, 10, 25, 100]"
+                                    (page)="getLevels($event)"
+                                    [showFirstLastButtons]="true">
+                                </mat-paginator>
+
+                                <h3>Niveles de la clase</h3>
+
+                                <mat-table [dataSource]="classRoom.levels"  #levels="matTable" levels>
+                                    <ng-container matColumnDef="id">''
+                                        <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                        <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="title">
+                                        <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                        <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="active">
+                                        <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
+                                        <mat-cell *matCellDef="let level">{{level.active}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                        <mat-cell *matCellDef="let level">
+                                            <a class="material-icons"
+                                            style="cursor:context-menu;z-index:1000;color: rgba(252, 59, 59, 0.635)"  
+                                                (click)="deleteLevel($event, level.id)">delete</a>
+                                        </mat-cell>
+                                    </ng-container>
+                                    <mat-header-row *matHeaderRowDef="displayedLevels"></mat-header-row>
+                                    <mat-row  *matRowDef="let row; columns: displayedLevels"  
+                                    matTooltip="Ver detalle de nivel"
+                                    matTooltipPositionAtOrigin="true"
+                                    hideDelay="1000"
+                                    (click)="goLevel(row.id)"></mat-row>
+                                </mat-table>
+
+                                <mat-divider></mat-divider>
+
+                                <h3>Listado de profesores</h3>
+
+                                <form class="row" style="width: 100%;" [formGroup]="formTeachers" (ngSubmit)="addTeachers()">
+                                    <mat-form-field class="col-6">
+                                        <mat-label>Añadir nuevos profesores por nombre</mat-label>
+                                        <input matInput type="string" 
+                                        [(ngModel)]="newTeachers" formControlName="newTeachers" 
+                                        placeholder="amy_winehouse,kurt_cobain">
+                                        <div *ngIf="newTeachers && !newTeachers.valid">{{newTeachers.errors| json}}</div>
+                                    </mat-form-field>
+                                    <button style="border: 0; background: transparent;">
+                                        <a [disabled]="!(formTeachers.valid && formTeachers.dirty)" 
+                                        type="submit"
+                                        class="material-icons" style="color: #00bcd4;">add</a>
+                                    </button> 
+                                </form>
+                                <div class="row">
+                            
+                                    <mat-form-field width="300px" style="padding-left: 30px;">
+                                        <mat-label>Filtrar por nombre</mat-label>
+                                        <input
+                                            matInput
+                                            type="string" 
+                                            [(ngModel)]="allTeachersNameFilter"
+                                            placeholder="Enter para filtrar"
+                                            (keyup.enter)="putAllTeachersFilter()">
+                                     </mat-form-field>
+                                </div>
+
+                                <mat-table [dataSource]="allTeachers" #allTeachersTable="matTable" allTeachersTable>
+                                    
+                                    <ng-container matColumnDef="id">
+                                        <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="username">
+                                        <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.username}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="rol">
+                                        <mat-header-cell *matHeaderCellDef>Rol</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.rol}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell> 
+                                        <mat-cell *matCellDef="let item">
+                                            <a *ngIf="canBeAddedAsTeacher(item.id, item.rol)" 
+                                            class="material-icons"
+                                            style="cursor:context-menu;z-index:1000;color: rgba(0, 224, 56, 0.863)"  
+                                                (click)="addTeacher($event, item.username)">add</a>
+        
+                                            <a *ngIf="!canBeAddedAsTeacher(item.id, item.rol)"></a>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="allTeachersColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: allTeachersColumns"
+                                    matTooltip="Ver detalle de nivel"
+                                    matTooltipPositionAtOrigin="true"
+                                    hideDelay="1000"
+                                    (click)="goUser(row.id)"></mat-row>
+                                </mat-table>
+                                <mat-paginator
+                                    #paginator
+                                    [length]="allTeachersPagination.length"
+                                    [pageIndex]="allTeachersPagination.pageIndex"
+                                    [pageSize]="allTeachersPagination.pageSize"
+                                    [pageSizeOptions]="[5, 10, 25, 100]"
+                                    (page)="getTeachers($event)"
+                                    [showFirstLastButtons]="true">
+                                </mat-paginator>
+
+
+
+
+
+                                <h3>Profesores</h3>
                                 
-                                    </form>
-                                    <mat-table [dataSource]="classRoom.levels"  #levels="matTable" levels>
-                                        <ng-container matColumnDef="id">''
+                                <mat-table [dataSource]="classRoom.teachers" #teachers="matTable" teachers>
+                                        <ng-container matColumnDef="id">
                                             <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">{{level.id}}</mat-cell>
+                                            <mat-cell *matCellDef="let teacher">{{teacher.id}}</mat-cell>
                                         </ng-container>
-                                        <ng-container matColumnDef="title">
+                                        <ng-container matColumnDef="username">
                                             <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">{{level.title}}</mat-cell>
+                                            <mat-cell *matCellDef="let teacher">{{teacher.username}}</mat-cell>
                                         </ng-container>
-                                        <ng-container matColumnDef="active">
-                                            <mat-header-cell *matHeaderCellDef>Activo</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">{{level.active}}</mat-cell>
+                                        <ng-container matColumnDef="rol">
+                                            <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                            <mat-cell *matCellDef="let teacher">{{teacher.username}}</mat-cell>
                                         </ng-container>
                                         <ng-container matColumnDef="actions">
                                             <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-                                            <mat-cell *matCellDef="let level">
+                                            <mat-cell *matCellDef="let teacher">
                                                 <a class="material-icons"
-                                                style="cursor:context-menu;z-index:1000;color: rgba(252, 59, 59, 0.635)"  
-                                                    (click)="deleteLevel($event, level.id)">delete</a>
+                                                style="cursor:context-menu;color: rgba(252, 59, 59, 0.635)"
+                                                    (click)="deleteTeacher($event, teacher.id)">delete</a>
                                             </mat-cell>
                                         </ng-container>
-                                        <mat-header-row *matHeaderRowDef="displayedLevels"></mat-header-row>
-                                        <mat-row  *matRowDef="let row; columns: displayedLevels"  
-                                        matTooltip="Ver detalle de nivel"
-                                        matTooltipPositionAtOrigin="true"
-                                        hideDelay="1000"
-                                        (click)="goLevel(row.id)"></mat-row>
-                                    </mat-table>
-
-                                <mat-divider></mat-divider>
-                                    <h3>Profesores</h3>
-                                    <form class="row" style="width: 100%;" [formGroup]="formTeachers" (ngSubmit)="addTeachers()">
-                                        <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos profesores por nombre</mat-label>
-                                            <input matInput type="string" 
-                                            [(ngModel)]="newTeachers" formControlName="newTeachers" 
-                                            placeholder="amy_winehouse,kurt_cobain">
-                                            <div *ngIf="newTeachers && !newTeachers.valid">{{newTeachers.errors| json}}</div>
-                                        </mat-form-field>
-                                        <button style="border: 0; background: transparent;">
-                                            <a [disabled]="!(formTeachers.valid && formTeachers.dirty)" 
-                                            type="submit"
-                                            class="material-icons" style="color: #00bcd4;">add</a>
-                                        </button> 
-                                    </form>
-                                    <mat-table [dataSource]="classRoom.teachers" #teachers="matTable" teachers>
-                                            <ng-container matColumnDef="id">
-                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
-                                                <mat-cell *matCellDef="let teacher">{{teacher.id}}</mat-cell>
-                                            </ng-container>
-                                            <ng-container matColumnDef="username">
-                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-                                                <mat-cell *matCellDef="let teacher">{{teacher.username}}</mat-cell>
-                                            </ng-container>
-                                            <ng-container matColumnDef="actions">
-                                                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-                                                <mat-cell *matCellDef="let teacher">
-                                                    <a class="material-icons"
-                                                    style="cursor:context-menu;color: rgba(252, 59, 59, 0.635)"
-                                                        (click)="deleteTeacher($event, teacher.id)">delete</a>
-                                                </mat-cell>
-                                            </ng-container>
-                                            <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
-                                            <mat-row *matRowDef="let row; columns: displayedUser" matTooltip="Ver detalle de nivel"
-                                             (click)="goUser(row.id)"></mat-row>
-                                    </mat-table>
+                                        <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
+                                        <mat-row *matRowDef="let row; columns: displayedUser" matTooltip="Ver detalle de nivel"
+                                            (click)="goUser(row.id)"></mat-row>
+                                </mat-table>
    
                                 <mat-divider></mat-divider>
-                                    <h3>Alumnos</h3>
-                                    <form class="row" style="width: 100%;" [formGroup]="formStudents" (ngSubmit)="addStudents()">
-                                        <mat-form-field class="col-6">
-                                            <mat-label>Añadir nuevos usuarios por nombre</mat-label>
-                                            <input matInput type="string" 
-                                            [(ngModel)]="newStudents" formControlName="newStudents" 
-                                            placeholder="bob_marley,amy_winehouse">
-                                            <div *ngIf="newStudents && !newStudents.valid">{{newStudents.errors| json}}</div>
-                                        </mat-form-field>
-                                        <button style="border: 0; background: transparent;">
-                                            <a [disabled]="!(formStudents.valid && formStudents.dirty)" 
-                                            type="submit"
-                                            class="material-icons" style="color: #00bcd4;">add</a>
-                                        </button> 
-                                    </form>
-                                    <mat-table [dataSource]="classRoom.students" #students="matTable" students>
-                                            <ng-container matColumnDef="id">
-                                                <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
-                                                <mat-cell *matCellDef="let student">{{student.id}}</mat-cell>
-                                            </ng-container>
-                                            <ng-container matColumnDef="username">
-                                                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-                                                <mat-cell *matCellDef="let student">{{student.username}}</mat-cell>
-                                            </ng-container>
-                                            <ng-container matColumnDef="actions">
-                                                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-                                                <mat-cell *matCellDef="let student">
-                                                    <a class="material-icons"
-                                                    style="cursor:context-menu;color: rgba(252, 59, 59, 0.635)"
-                                                        (click)="deleteStudent($event, student.id)">delete</a>
-                                                </mat-cell>
-                                            </ng-container>
-                                            <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
-                                            <mat-row *matRowDef="let row; columns: displayedUser"
-                                             matTooltip="Ver detalle de nivel" (click)="goUser(row.id)"></mat-row>
-                                    </mat-table>
+                                
+                                <h3>Listado de Usuarios</h3>
+                                <form class="row" style="width: 100%;" [formGroup]="formStudents" (ngSubmit)="addStudents()">
+                                    <mat-form-field class="col-6">
+                                        <mat-label>Añadir nuevos usuarios por nombre</mat-label>
+                                        <input matInput type="string" 
+                                        [(ngModel)]="newStudents" formControlName="newStudents" 
+                                        placeholder="bob_marley,amy_winehouse">
+                                        <div *ngIf="newStudents && !newStudents.valid">{{newStudents.errors| json}}</div>
+                                    </mat-form-field>
+                                    <button style="border: 0; background: transparent;">
+                                        <a [disabled]="!(formStudents.valid && formStudents.dirty)" 
+                                        type="submit"
+                                        class="material-icons" style="color: #00bcd4;">add</a>
+                                    </button> 
+                                </form>
+                                <div class="row">
+                            
+                                    <mat-form-field width="300px" style="padding-left: 30px;">
+                                        <mat-label>Filtrar por nombre</mat-label>
+                                        <input
+                                            matInput
+                                            type="string" 
+                                            [(ngModel)]="allStudentsNameFilter"
+                                            placeholder="Enter para filtrar"
+                                            (keyup.enter)="putAllStudentsFilter()">
+                                     </mat-form-field>
+                                </div>
+
+                                <mat-table [dataSource]="allStudents" #allStudentsTable="matTable" allStudentsTable>
+                                    
+                                    <ng-container matColumnDef="id">
+                                        <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="username">
+                                        <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.username}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="rol">
+                                        <mat-header-cell *matHeaderCellDef>Rol</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">{{item.rol}}</mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                        <mat-cell *matCellDef="let item">
+                                            <a *ngIf="canBeAddedAsStudent(item.id, item.rol)" 
+                                            class="material-icons"
+                                            style="cursor:context-menu;z-index:1000;color: rgba(0, 224, 56, 0.863)"  
+                                                (click)="addStudent($event, item.username)">add</a>
+        
+                                            <a *ngIf="!canBeAddedAsStudent(item.id, item.rol)"></a>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="allStudentsColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: allStudentsColumns"
+                                    matTooltip="Ver detalle de nivel"
+                                    matTooltipPositionAtOrigin="true"
+                                    hideDelay="1000"
+                                    (click)="goUser(row.id)"></mat-row>
+                                </mat-table>
+                                <mat-paginator
+                                    #paginator
+                                    [length]="allStudentsPagination.length"
+                                    [pageIndex]="allStudentsPagination.pageIndex"
+                                    [pageSize]="allStudentsPagination.pageSize"
+                                    [pageSizeOptions]="[5, 10, 25, 100]"
+                                    (page)="getStudents($event)"
+                                    [showFirstLastButtons]="true">
+                                </mat-paginator>
+
+
+
+
+
+
+                                <h3>Estudiantes</h3>
+                                <mat-table [dataSource]="classRoom.students" #students="matTable" students>
+                                        <ng-container matColumnDef="id">
+                                            <mat-header-cell *matHeaderCellDef>Identificador</mat-header-cell>
+                                            <mat-cell *matCellDef="let student">{{student.id}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="username">
+                                            <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                                            <mat-cell *matCellDef="let student">{{student.username}}</mat-cell>
+                                        </ng-container>
+                                        <ng-container matColumnDef="actions">
+                                            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                                            <mat-cell *matCellDef="let student">
+                                                <a class="material-icons"
+                                                style="cursor:context-menu;color: rgba(252, 59, 59, 0.635)"
+                                                    (click)="deleteStudent($event, student.id)">delete</a>
+                                            </mat-cell>
+                                        </ng-container>
+                                        <mat-header-row *matHeaderRowDef="displayedUser"></mat-header-row>
+                                        <mat-row *matRowDef="let row; columns: displayedUser"
+                                            matTooltip="Ver detalle de nivel" (click)="goUser(row.id)"></mat-row>
+                                </mat-table>
 
                             </div>
                         </div>
