@@ -53,7 +53,8 @@
                                         padding: 8px; /* Espaciado interno */
                                         }
                                         td {
-                                            text-align: left; /* Alineación del texto */
+                                            text-align: center; /* Alineación del texto */
+                                            padding: 2px;
                                         }
                                     
                                         th {
@@ -72,7 +73,8 @@
             
                                         <tr *ngFor="let student of classRoom.students">
                                             <td>{{ student.username }}</td>
-                                            <td *ngFor="let level of classRoom.levels" [style.background-color]= "levelBeenCompletedByStudent(student.id, level.id) ? 'green' : 'white'">
+                                            <td *ngFor="let level of classRoom.levels" [style.background-color]= "levelBeenCompletedByStudent(student.id, level.id) ? '#90ee90' : '#ffffff'">
+                                                {{ levelBeenCompletedByStudent(student.id, level.id) ? '✓' : '✗' }}
                                             </td>
                                         </tr>
                                         </tbody>
