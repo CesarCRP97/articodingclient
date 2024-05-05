@@ -37,8 +37,9 @@ export class PlaylistDetailComponent implements OnInit {
         private serverService: ServerService,
         private activateRoute: ActivatedRoute,
     ) {
-        this.formLevels  =this.formBuilder.group({
-            newAddedLevels: [this.newAddedLevels]});
+        this.formLevels = this.formBuilder.group({
+            newAddedLevels: [this.newAddedLevels]
+        });
 
         this.allLevelsPagination.pageIndex = 0;
         this.allLevelsPagination.pageSize = 5;
@@ -62,14 +63,31 @@ export class PlaylistDetailComponent implements OnInit {
         }
     }
 
+    private getPlaylist(): void {
+        this.subRefs$.push(
+            this.serverService.getPlaylist(this.playlistId).subscribe(res => {
+                if (res.status !== 200) {
+                    alert('Algo ha pasado... ' + res.status);
+                    return;
+                }
+
+                this.playlistDetail = res.body;
+                this.formPlaylist = this.formBuilder.group({
+                    name: [this.playlistDetail.title],
+                    enabled: [this.playlistDetail.enabled]
+                });
+            }, err => alert(err.error.message))
+        );
+    }
+
     public editPlaylist(): void {
         if (!this.isNew) {
             this.subRefs$.push(
-                this.serverService.putPlaylist({
+                this.serverService.putPlaylist(this.playlistId, {
                     name: this.formPlaylist.controls.name.value,
-                    description: this.formPlaylist.controls.description.value,
                     enabled: this.playlistDetail.enabled
-                }).subscribe(res => {
+                }
+                ).subscribe(res => {
                     if (res.status === 200) {
                         this.getPlaylist();
                     } else alert('Algo ha pasado... ' + res.status);
@@ -79,7 +97,6 @@ export class PlaylistDetailComponent implements OnInit {
             this.subRefs$.push(
                 this.serverService.postPlaylist({
                     name: this.formPlaylist.controls.name.value,
-                    description: this.formPlaylist.controls.description.value,
                     enabled: this.playlistDetail.enabled,
                     studentsId: [],
                     teachersId: []
@@ -102,38 +119,27 @@ export class PlaylistDetailComponent implements OnInit {
         this.getLevels(this.allLevelsPagination, this.allLevelsNameFilter === "" ? undefined : this.allLevelsNameFilter);
     }
 
-    private getPlaylist(): void {
-        this.subRefs$.push(
-            this.serverService.getPlaylist(this.playlistId).subscribe(res => {
-                if (res.status !== 200) {
-                    alert('Algo ha pasado... ' + res.status);
-                    return;
-                }
-
-                this.playlistDetail = res.body;
-                this.formPlaylist = this.formBuilder.group({
-                    name: [this.playlistDetail.title],
-                    enabled: [this.playlistDetail.enabled]
-                });
-            }, err => alert(err.error.message))
-        );
-    }
 
     private getLevels(event: PageEvent, nameFilter?: string): void {
         this.allLevelsPagination = event;
 
         this.subRefs$.push(
-            this.serverService.getLevels(this.allLevelsPagination.pageIndex, this.allLevelsPagination.pageSize, null, null, this.allLevelsNameFilter).subscribe(res => {
-                if (res.status !== 200) {
-                    alert('Algo ha pasado... ' + res.status);
-                    return;
-                }
+            this.serverService.getLevels(
+                this.allLevelsPagination.pageIndex,
+                this.allLevelsPagination.pageSize, 
+                null, null, 
+                this.allLevelsNameFilter
+            ).subscribe(res => {
+                    if (res.status !== 200) {
+                        alert('Algo ha pasado... ' + res.status);
+                        return;
+                    }
 
-                const response: IPage<ILevelWithImage> = res.body;
-                this.allLevels = response.content;
-                this.allLevelsPagination.pageIndex = response.pageable.pageNumber;
-                this.allLevelsPagination.pageSize = response.pageable.pageSize;
-                this.allLevelsPagination.length = response.totalElements;
+                    const response: IPage<ILevelWithImage> = res.body;
+                    this.allLevels = response.content;
+                    this.allLevelsPagination.pageIndex = response.pageable.pageNumber;
+                    this.allLevelsPagination.pageSize = response.pageable.pageSize;
+                    this.allLevelsPagination.length = response.totalElements;
             }, err => alert(err.error.message))
         );
     }
@@ -141,58 +147,58 @@ export class PlaylistDetailComponent implements OnInit {
     private addLevel(event: MouseEvent, levelId: string) {
         event.preventDefault();
         event.stopPropagation();
-        if(confirm('¿Está seguro de agregar el nivel '+ levelId + ' a la clase?')) {
+        if (confirm('¿Está seguro de agregar el nivel ' + levelId + ' a la clase?')) {
             this.subRefs$.push(
-            this.serverService.addLevelsToPlaylist(this.playlistId, {'levels' : [levelId]})
-            .subscribe(
-                res => {
-                if (res.status === 200) {
-                    this.getPlaylist();
-                } else alert('Algo ha pasado... ' + res.status);
-                }, err => alert(err.error.message)
-            )
+                this.serverService.addLevelsToPlaylist(this.playlistId, { 'levels': [levelId] })
+                    .subscribe(
+                        res => {
+                            if (res.status === 200) {
+                                this.getPlaylist();
+                            } else alert('Algo ha pasado... ' + res.status);
+                        }, err => alert(err.error.message)
+                    )
             );
         }
     }
-    addLevels() {
+    private addLevels() {
         const numbers = this.newAddedLevels.trim().split(',')
             .filter(n => Number(n))
             .map(n => parseInt(n));
         //valid guarda aquellos elementos que no sean numeros. Por lo que si valid.length > 0, hay ids que no son correctos.
         if (numbers.length == 0) {
-          this.formLevels.controls['newLevels'].setErrors({'incorrect': true});
-          alert("Debe indicar el identificador de la clase o clases, separado por comas.\n" +
-          "Por ejemplo: 1,2,3");
+            this.formLevels.controls['newLevels'].setErrors({ 'incorrect': true });
+            alert("Debe indicar el identificador de la clase o clases, separado por comas.\n" +
+                "Por ejemplo: 1,2,3");
         } else {
-          console.log(numbers);
-          this.subRefs$.push(
-            this.serverService.addLevelsToPlaylist(this.playlistId, { 'levels' : numbers })
-            .subscribe(
-              res => {
-                if (res.status === 200) {
-                  this.formLevels.reset();
-                  this.getPlaylist();
-                } else alert('Algo ha pasado... ' + res.status);
-              }, err => alert(err.error.message)
-            )
-          );
+            console.log(numbers);
+            this.subRefs$.push(
+                this.serverService.addLevelsToPlaylist(this.playlistId, { 'levels': numbers })
+                    .subscribe(
+                        res => {
+                            if (res.status === 200) {
+                                this.formLevels.reset();
+                                this.getPlaylist();
+                            } else alert('Algo ha pasado... ' + res.status);
+                        }, err => alert(err.error.message)
+                    )
+            );
         }
-        
-      }
+
+    }
 
     private deleteLevel(event: MouseEvent, levelId: string) {
         event.preventDefault();
         event.stopPropagation();
-        if(confirm('¿Está seguro de eliminar el nivel '+ levelId + ' de la clase?')) {
+        if (confirm('¿Está seguro de eliminar el nivel ' + levelId + ' de la clase?')) {
             this.subRefs$.push(
-            this.serverService.deleteLevelOfPlaylist(this.playlistId, levelId)
-            .subscribe(
-                res => {
-                if (res.status === 200) {
-                    this.getPlaylist();
-                } else alert('Algo ha pasado... ' + res.status);
-                }, err => alert(err.error.message)
-            )
+                this.serverService.deleteLevelOfPlaylist(this.playlistId, levelId)
+                    .subscribe(
+                        res => {
+                            if (res.status === 200) {
+                                this.getPlaylist();
+                            } else alert('Algo ha pasado... ' + res.status);
+                        }, err => alert(err.error.message)
+                    )
             );
         }
     }
@@ -204,7 +210,7 @@ export class PlaylistDetailComponent implements OnInit {
     private goLevel(levelId: string) {
         const currentUrl = '/#/levels/' + levelId;
         this.router.navigateByUrl(currentUrl).then(() => {
-          window.location.reload();
+            window.location.reload();
         });
-      }
+    }
 }
